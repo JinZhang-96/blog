@@ -5,30 +5,29 @@ categories:
 tags:
 - hexo
 ---
-[Hexo](https://hexo.io/) 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。  
+[Hexo](https://hexo.io/) 是一个可以帮助我们快速搭建博客网站的框架。
+以下是官网的描述：
+Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。  
 
-## 快速开始
+## 特点
 
-### 安装
+### 静态网站
 
-#### 安装前提
+Hexo 支持 Markdown（或其他标记语言）书写文章，其内部有基于 Node.js 的解析程序。通过 `hexo generate` 命令可以把文章解析为 html 静态文件。
 
-安装 Hexo 相当简单，只需要先安装下列应用程序即可：
+### 快速开发
 
-Node.js (Node.js 版本需不低于 10.13，建议使用 Node.js 12.0 及以上版本)
-Git
-如果您的电脑中已经安装上述必备程序，那么恭喜您！你可以直接前往 安装 Hexo 步骤。
+框架内置了博客系统中基本的功能模块，所以无需从零开发，只需修改一些配置文件， 就可以轻松快速的搭建起一个博客系统。
 
-如果您的电脑中尚未安装所需要的程序，请根据以下安装指示完成安装。
+### 主题丰富
 
-#### 安装 Git
+Hexo 生态圈内有上百个主题，只需修改几个配置字段就可以让网站更换风格。
 
-* Windows：下载并安装 [git](https://git-scm.com/download/win)。
-* Mac：使用 Homebrew, MacPorts 或者下载 [安装程序](http://sourceforge.net/projects/git-osx-installer/)。
-* Linux (Ubuntu, Debian)：`sudo apt-get install git-core`
-* Linux (Fedora, Red Hat, CentOS)：`sudo yum install git-core`
+## 安装
 
-#### 安装 Node.js
+Hexo 是基于 Node.js 的，所以使用 Hexo ，需要先在操作系统安装 Node.js ，并配置好环境变量。
+
+### 安装 Node.js
 
 Node.js 为大多数平台提供了官方的 [安装程序](https://nodejs.org/zh-cn/download/)。对于中国大陆地区用户，可以前往 [淘宝 Node.js 镜像](https://npmmirror.com/mirrors/node/) 下载。
 
@@ -40,32 +39,41 @@ Node.js 为大多数平台提供了官方的 [安装程序](https://nodejs.org/z
 * 其它：使用相应的软件包管理器进行安装，可以参考由 Node.js 提供的 指导。
 * 对于 Mac 和 Linux 同样建议使用 nvs 或者 nvm，以避免可能会出现的权限问题。
 
-#### 安装 Hexo
+### 安装 Hexo
 
 所有必备的应用程序安装完成后，即可使用 npm 安装 Hexo。
 
-执行以下命令进行全局安装
+全局安装
 ``` bash
 $ npm install -g hexo-cli
 ``` 
 
-
-执行以下命令进行局部安装
+局部安装
 ``` bash
 $ npm install hexo
 ```
+我这里使用了局部安装命令，具体安装步骤如下：
 
-### 建站
+1. 安装  
+新建目录，进入该目录，执行以下命令：  
+``` bash  
+$ npm install hexo  
+```
+安装成功后，会生成一个 package.json 文件，编辑此文件，添加如下配置：  
+``` json
+   "scripts": {
+     "init": "hexo init"
+   }
+ ```
 
-安装 Hexo 完成后，请执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。
-
+2. 初始化  
+执行以下命令初始化 Hexo 到指定目录：  
 ``` bash
 $ hexo init <folder>
 $ cd <folder>
 $ npm install
 ```
-
-新建完成后，指定文件夹的目录如下：
+新建完成后，指定目录的目录结构如下：  
 ```
 .
 ├── node_modules
@@ -76,11 +84,86 @@ $ npm install
 ├── _config.yml
 └── package.json
 ```
-现在可以执行下列命令，运行Hexo博客。
 
+3. 启动  
+执行下列命令，启动 Hexo 博客：  
 ``` bash
 $ npm run server
 ```
+打开浏览器访问 `http://localhost:4000` ，界面如 (图一) 所示：  
+![(图一)]
+
+## 设置主题
+
+Hexo[开源社区](https://hexo.io/themes/) 提供了很多主题。
+
+执行以下命令安装主题：
+
+``` bash
+$ npm install theme
+```
+### 配置（5.0.0 版本及以上）
+
+|      参数	  |     描述    |
+|--------------|-------------|
+|theme         |	当前主题名称。值为false时禁用主题                                    |
+|theme_config  |	主题的配置文件。在这里放置的配置会覆盖主题目录下的 _config.yml 中的配置|
+
+编辑 _config.yml 文件，做如下配置：
+``` yml
+theme: [theme]
+```
+
+在 _config.yml 文件所在目录下，创建 _config.[theme].yml 文件，设置主题配置。
+
+
+Hexo 在合并主题配置时，Hexo 配置文件中的 theme_config 的优先级最高，其次是 _config.[theme].yml 文件，最后是位于主题目录下的 _config.yml 文件。
+
+## GitHub Pages 部署
+
+GitHub Pages是[Github](https://github.com/)提供的免费服务，它可以让我们部署一些静态资源。
+这样我们不需要购买服务器和域名， 就可以在公网访问自己的博客了。
+
+### 创建仓库
+
+1. 建立名为 <你的 GitHub 用户名>.github.io 的储存库，若之前已将 Hexo 上传至其他储存库，将该储存库重命名即可。
+2. 将 Hexo 文件夹中的文件 push 到储存库的默认分支，默认分支通常名为 main，旧一点的储存库可能名为 master。
+将 main 分支 push 到 GitHub：
+
+    ``` bash
+    $ git push -u origin main
+    ```
+    默认情况下 public/ 不会被上传(也不该被上传)，确保 .gitignore 文件中包含一行 public/。整体文件夹结构应该与 范例储存库 大致相似。
+
+### 部署
+
+1. 安装 hexo-deployer-git。
+
+    ``` bash
+    $ npm install hexo-deployer-git --save
+    ```
+
+2. 在 _config.yml 中添加以下配置（如果配置已经存在，请将其替换为如下）:
+
+    ``` yml
+    deploy:
+    type: git
+    repo: https://github.com/<username>/<project>
+    # example, https://github.com/hexojs/hexojs.github.io
+    branch: gh-pages
+    ```
+3. 执行 `hexo clean && hexo deploy` 。
+
+    除非你使用令牌或 SSH 密钥认证，否则你会被提示提供目标仓库的用户名和密码。
+    hexo-deployer-git 并不会存储你的用户名和密码. 请使用 [git-credential-cache](https://git-scm.com/docs/git-credential-cache) 来临时存储它们。
+
+4. 浏览 <GitHub 用户名>.github.io 检查你的网站能否运作。
+
+到此为止，Hexo的安装、启动、配置、发布就介绍完了。
+
+
+---------------------------------------------------------------------------
+**以下是Hexo的一些配置参数说明和命令说明，可以进行参考：**
 
 ## 配置
 
@@ -396,43 +479,4 @@ $ hexo --cwd /path/to/cwd
 
 自定义当前工作目录（Current working directory）的路径。
 
-## GitHub Pages 部署
-
-GitHub Pages是[Github](https://github.com/)提供的免费服务，它可以让我们部署一些静态资源。
-这样我们不需要购买服务器和域名， 就可以让自己的博客在公网上可以访问了。
-
-### 创建仓库
-
-1. 建立名为 <你的 GitHub 用户名>.github.io 的储存库，若之前已将 Hexo 上传至其他储存库，将该储存库重命名即可。
-2. 将 Hexo 文件夹中的文件 push 到储存库的默认分支，默认分支通常名为 main，旧一点的储存库可能名为 master。
-将 main 分支 push 到 GitHub：
-
-    ``` bash
-    $ git push -u origin main
-    ```
-    默认情况下 public/ 不会被上传(也不该被上传)，确保 .gitignore 文件中包含一行 public/。整体文件夹结构应该与 范例储存库 大致相似。
-
-
-### 部署
-
-1. 安装 hexo-deployer-git。
-
-    ``` bash
-    $ npm install hexo-deployer-git --save
-    ```
-
-2. 在 _config.yml 中添加以下配置（如果配置已经存在，请将其替换为如下）:
-
-    ``` yml
-    deploy:
-    type: git
-    repo: https://github.com/<username>/<project>
-    # example, https://github.com/hexojs/hexojs.github.io
-    branch: gh-pages
-    ```
-3. 执行 `hexo clean && hexo deploy` 。
-
-    除非你使用令牌或 SSH 密钥认证，否则你会被提示提供目标仓库的用户名和密码。
-    hexo-deployer-git 并不会存储你的用户名和密码. 请使用 [git-credential-cache](https://git-scm.com/docs/git-credential-cache) 来临时存储它们。
-
-4. 浏览 <GitHub 用户名>.github.io 检查你的网站能否运作。
+[(图一)]: index.jpg

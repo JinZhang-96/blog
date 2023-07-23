@@ -5,7 +5,7 @@
 # Site
 title: 'Bay Blog'
 subtitle: 'Quick notes'
-description: '好记性不如烂笔头，积累一些技术性文章，来帮助自己提高解决问题的能力。'
+description: '好记性不如烂笔头，记录一些个人遇到的技术问题'
 keywords:
 author: Bay
 language: zh-CN
@@ -40,7 +40,10 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
+marked:
+  prependRoot: true
+  postAsset: true
 relative_link: false
 future: true
 highlight:

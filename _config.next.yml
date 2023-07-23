@@ -260,7 +260,7 @@ symbols_count_time:
   item_text_total: false
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
-tag_icon: false
+tag_icon: true
 
 # Donate (Sponsor) settings
 # Front-matter variable (nonsupport animation).
@@ -270,10 +270,10 @@ reward_settings:
   animation: false
 
 reward:
-  #wechatpay: /images/wechatpay.png
-  #alipay: /images/alipay.png
-  #paypal: /images/paypal.png
-  #bitcoin: /images/bitcoin.png
+  # wechatpay: /images/wechatpay.png
+  alipay: /images/alipay.jpg
+  # paypal: /images/paypal.png
+  # bitcoin: /images/bitcoin.png
 
 # Subscribe through Telegram Channel, Twitter, etc.
 # Usage: `Key: permalink || icon` (Font Awesome)
@@ -419,7 +419,7 @@ github_banner:
 # ---------------------------------------------------------------
 
 font:
-  enable: false
+  enable: true
 
   # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).
   host:
@@ -433,7 +433,7 @@ font:
   global:
     external: true
     family: Lato
-    size:
+    size: 
 
   # Font settings for site title (.site-title).
   title:
@@ -660,18 +660,18 @@ comments:
   style: tabs
   # Choose a comment system to be displayed by default.
   # Available values: disqus | disqusjs | changyan | livere | gitalk | utterances
-  active:
+  active: changyan
   # Setting `true` means remembering the comment system selected by the visitor.
   storage: true
   # Lazyload all comment systems.
-  lazyload: false
+  lazyload: true
   # Modify texts or order for any naves, here are some examples.
   nav:
-    #disqus:
-    #  text: Load Disqus
-    #  order: -1
-    #gitalk:
-    #  order: -2
+    disqus:
+     text: Load Disqus
+     order: -1
+    gitalk:
+     order: -2
 
 # Disqus
 # For more information: https://disqus.com
@@ -695,9 +695,9 @@ disqusjs:
 # Changyan
 # For more information: https://changyan.kuaizhan.com
 changyan:
-  enable: false
-  appid:
-  appkey:
+  enable: true
+  appid: cytLCoQ5O
+  appkey: 526b7923ea67228eb51c23004301eb46
   # Show comments count
   count: true
 
@@ -744,10 +744,11 @@ isso: # <data_isso>
 
 # AddToAny Share. See: https://www.addtoany.com
 addtoany:
-  enable: false
+  enable: true
   buttons:
     - facebook
     - twitter
+    - wechat
 
 
 # ---------------------------------------------------------------
