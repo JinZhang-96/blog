@@ -21,15 +21,17 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jinzhang-96.github.io","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":true,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/blog/js/config.js"></script>
 
-    <meta name="description" content="本文记录了在 CentOS 7操作系统 中 安装 Docker 的完整过程。">
+    <meta name="description" content="Docker 是一款开源的虚拟化容器。本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。 准备安装环境在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：  可以正常访问网络 分区文件系统类型，支持 Docker 的存储驱动类型。 操作系统内核版本满足 Docker 的要求。  运气不是太好，以上这 3 个问题在安装的过程中都遇到了，这浪费了很多的时间。以下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker Install">
 <meta property="og:url" content="https://jinzhang-96.github.io/blog/2023/07/23/centos/docker-install/index.html">
 <meta property="og:site_name" content="Bay Blog">
-<meta property="og:description" content="本文记录了在 CentOS 7操作系统 中 安装 Docker 的完整过程。">
+<meta property="og:description" content="Docker 是一款开源的虚拟化容器。本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。 准备安装环境在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：  可以正常访问网络 分区文件系统类型，支持 Docker 的存储驱动类型。 操作系统内核版本满足 Docker 的要求。  运气不是太好，以上这 3 个问题在安装的过程中都遇到了，这浪费了很多的时间。以下">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jinzhang-96.github.io/blog/2023/07/23/centos/docker-install/network.jpg">
+<meta property="og:image" content="https://jinzhang-96.github.io/blog/2023/07/23/centos/docker-install/nginx.jpg">
 <meta property="article:published_time" content="2023-07-23T15:19:15.453Z">
-<meta property="article:modified_time" content="2023-07-23T15:22:56.615Z">
+<meta property="article:modified_time" content="2023-07-23T18:04:09.984Z">
 <meta property="article:author" content="Bay">
 <meta property="article:tag" content="CentOS">
 <meta property="article:tag" content="Docker">
@@ -137,7 +139,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -150,6 +152,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">准备安装环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%BD%91%E5%8D%A1"><span class="nav-number">1.1.</span> <span class="nav-text">配置网卡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">格式化分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8"><span class="nav-number">1.3.</span> <span class="nav-text">升级内核</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">开始安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">2.1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -216,9 +219,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-07-23 23:19:15 / 修改时间：23:22:56" itemprop="dateCreated datePublished" datetime="2023-07-23T23:19:15+08:00">2023-07-23</time>
+      <time title="创建时间：2023-07-23 23:19:15" itemprop="dateCreated datePublished" datetime="2023-07-23T23:19:15+08:00">2023-07-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-24 02:04:09" itemprop="dateModified" datetime="2023-07-24T02:04:09+08:00">2023-07-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -257,7 +266,116 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>本文记录了在 CentOS 7操作系统 中 安装 Docker 的完整过程。</p>
+    <div class="post-body" itemprop="articleBody"><p><a target="_blank" rel="noopener" href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
+<h2 id="准备安装环境"><a href="#准备安装环境" class="headerlink" title="准备安装环境"></a>准备安装环境</h2><p>在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：</p>
+<ol>
+<li>可以正常访问网络</li>
+<li>分区文件系统类型，支持 Docker 的存储驱动类型。</li>
+<li>操作系统内核版本满足 Docker 的要求。</li>
+</ol>
+<p>运气不是太好，以上这 3 个问题在安装的过程中都遇到了，这浪费了很多的时间。<br>以下分别是这 3 个问题的解决办法。</p>
+<h3 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h3><p>如果 CentOS 7 连不上网络，是无法使用包管理工具安装 Docker 的。<br>出现这种问题主要原因是网卡没有配置正确，查看当前有哪些网卡，使用以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ifconfig</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">eno16777736: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.128.3  netmask 255.255.255.0  broadcast 192.168.128.255</span><br><span class="line">        inet6 fe80::20c:29ff:fe90:7a54  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:0c:29:90:7a:54  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 98076  bytes 117924104 (112.4 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 20565  bytes 1481553 (1.4 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+<p>可以看到当前主机有 2 张网卡。<br>其中名字为 lo 这张网卡为本地环回网卡，它的IP地址是127.0.0.1（localhost），利用这个接口可以实现系统内部发送和接收数据，无需关心。<br>名字的前缀为 eno 的网卡才是和外部网络交换数据的网卡， 我们需要重新配置它， 执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/sysconfig/network-script/ifcfg-[name]     <span class="comment"># name 为网卡的名字</span></span><br><span class="line"></span><br><span class="line">修改如下：</span><br><span class="line"></span><br><span class="line">TYPE=Ethernet</span><br><span class="line">BOOTPROTO=static        <span class="comment"># static 使用静态 IP; dhcp 通过 dhcp 服务动态分配IP</span></span><br><span class="line">DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=<span class="built_in">yes</span></span><br><span class="line">IPV6_AUTOCONF=<span class="built_in">yes</span></span><br><span class="line">IPV6_DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">NAME=eno16777736</span><br><span class="line">UUID=2bd860aa-dcf9-4e5f-9297-63bfd3b5943c</span><br><span class="line">DEVICE=eno16777736</span><br><span class="line">ONBOOT=<span class="built_in">yes</span>              <span class="comment"># 指定是否在开机时启用该网卡</span></span><br><span class="line">IPADDR=192.168.128.3    <span class="comment"># 配置正确的网卡IP         BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">NETMASK=255.255.255.0   <span class="comment"># 配置正确的子网掩码       BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">GATEWAY=192.168.128.2   <span class="comment"># 配置正确的网关           BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">DNS1=192.168.128.2      <span class="comment"># 配置正确的DNS服务器， 如果错误会导致 IP 可以访问， 域名无法访问的问题</span></span><br><span class="line"></span><br><span class="line">:wq 保存并退出</span><br></pre></td></tr></table></figure>
+<p>其中IPADDR 、NETMASK 、GATEWAY 、DNS1 这 4 项不是固定的，没必要按照上边的复制，要根据实际的网络环境配置。<br>当前主机的虚拟网络编辑器如（图一）所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/network.jpg" alt="(图一)"></p>
+<p>重启网卡，执行如下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl restart network （启动中）</span><br><span class="line">$ systemctl start network   （已关闭）</span><br></pre></td></tr></table></figure>
+<p>执行 <code>ping www.baidu.com</code>，查看能否 ping 通。<br>如果还是不通， 则查看防火墙是否关闭，并执行下面命令关闭防火墙：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl stop firewalld</span><br><span class="line">$ systemctl <span class="built_in">disable</span>  firewalld (禁用，重启操作系统后， 防火墙不会自动启动)</span><br></pre></td></tr></table></figure>
+<h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>下表是 Docker 存储驱动类型和 CentOS 文件系统类型的对应关系。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Storage driver</th>
+<th align="center">Supported backing filesystems</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">overlay2</td>
+<td align="center">xfs with ftype&#x3D;1, ext4</td>
+</tr>
+<tr>
+<td align="center">fuse-overlayfs</td>
+<td align="center">any filesystem</td>
+</tr>
+<tr>
+<td align="center">devicemapper</td>
+<td align="center">direct-lvm</td>
+</tr>
+<tr>
+<td align="center">btrfs</td>
+<td align="center">btrfs</td>
+</tr>
+<tr>
+<td align="center">zfs</td>
+<td align="center">zfs</td>
+</tr>
+<tr>
+<td align="center">vfs</td>
+<td align="center">any filesystem</td>
+</tr>
+</tbody></table>
+<p>如果没有在 <code>/etc/docker/daemon.json</code> 指定 storage-driver，  Docker 在安装的过程中发现CentOS 文件系统类型不支持存储驱动类型的时候，会自动降级，其中 vfs 存储驱动类型可以在任何文件系统类型中兼容， 这样能保证 Docker 在这一步安装过程能正常通过。</p>
+<p>本机在 <code>/etc/docker/daemon.json</code> 文件中指定了 <code>&quot;storage-driver&quot;:&quot;overlay2&quot;</code>，所以格式化分区为xfs文件系统，否则安装过程会报错。<br>在分区格式化之前， 请确保重要数据进行备份，因为重新格式化文件系统将删除所有数据。</p>
+<ol>
+<li><p>查看各个分区当前的文件类型，执行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ lsblk -f</span><br></pre></td></tr></table></figure></li>
+<li><p>选择要分区的磁盘。例如，如果要分区的磁盘是&#x2F;dev&#x2F;sda，则运行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo fdisk /dev/sda</span><br></pre></td></tr></table></figure></li>
+<li><p>在fdisk命令提示符下，可以使用以下命令进行分区：<br>n：创建一个新分区。<br>d：删除一个分区。<br>p：显示分区表。<br>w：保存并退出。</p>
+</li>
+<li><p>使用n命令创建一个新分区。根据提示输入分区的起始扇区和大小。</p>
+</li>
+<li><p>使用p命令查看分区表，确保分区已成功创建。</p>
+</li>
+<li><p>使用w命令保存并退出fdisk。</p>
+</li>
+<li><p>分区格式化，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkfs.xfs -n ftype=1 /dev/&lt;device&gt;</span><br></pre></td></tr></table></figure>
+<p>将<device>替换为您要重新格式化的设备名称，例如&#x2F;dev&#x2F;sda。</p>
+</li>
+<li><p>挂载重新格式化的文件系统。运行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mount -o ftype=1 /dev/&lt;device&gt; /var/lib/docker</span><br></pre></td></tr></table></figure>
+<p>同样，将<device>替换为重新格式化的设备名称。</p>
+</li>
+</ol>
+<h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p>本机安装的 Docker 为 24.0.4 ，要求内核版本为 3.10 或更高版本。<br>如果内核版本过低， Docker 安装之后， 容器暴露的接口，无法访问。</p>
+<ol>
+<li>查看当前系统的内核版本，命令如下：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
+<li>更新系统软件包列表：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum update</span><br></pre></td></tr></table></figure></li>
+<li>安装 ELRepo 存储库，该存储库提供了最新的稳定内核版本：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm</span><br></pre></td></tr></table></figure></li>
+<li>安装最新的稳定内核版本：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum --enablerepo=elrepo-kernel install kernel-ml</span><br></pre></td></tr></table></figure></li>
+<li>更新 GRUB 配置以使用新内核：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg</span><br></pre></td></tr></table></figure></li>
+<li>重启系统以应用新内核：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo reboot</span><br></pre></td></tr></table></figure></li>
+<li>重启后，您可以再次运行 <code>uname -r</code> 命令来确认内核版本是否已成功升级。</li>
+</ol>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>安装 Docker 之前， 需要做以下2件事：  </p>
+<ol>
+<li><p>移除之前安装的 Docker，执行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置 Docker 仓库，执行以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils</span><br><span class="line">$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><ol>
+<li><p>安装 docker 依赖，执行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动 Docker，执行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>拉取 Nginx 镜像，执行以下命令： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull nginx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行 Nginx ，并暴露 80 接口，执行以下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run nginx -d -p 80:80</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>监测是否启动成功<br>浏览器访问 <code>http://192.168.128.3</code>， 如(图二)所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/nginx.jpg" alt="(图二)"></p>
+</li>
+</ol>
 
     </div>
 
