@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 'Blog'
+title: 'Bay Blog'
 subtitle: 'Quick notes'
-description: '本站是我的技术博客，将我遇到的一些技术问题的解决过程记录下来。'
+description: '好记性不如烂笔头，积累一些技术性文章，来帮助自己提高解决问题的能力。'
 keywords:
 author: Bay
 language: zh-CN
