@@ -73,7 +73,7 @@ $ hexo init <folder>
 $ cd <folder>
 $ npm install
 ```
-新建完成后，指定目录的目录结构如下：  
+初始化完成后，指定目录的目录结构如下：  
 ```
 .
 ├── node_modules
@@ -121,7 +121,7 @@ Hexo 在合并主题配置时，Hexo 配置文件中的 theme_config 的优先�
 
 ## GitHub Pages 部署
 
-GitHub Pages是[Github](https://github.com/)提供的免费服务，它可以让我们部署一些静态资源。
+GitHub Pages 是 [Github](https://github.com/) 提供的免费服务，它可以让我们部署一些静态资源。
 这样我们不需要购买服务器和域名， 就可以在公网访问自己的博客了。
 
 ### 创建仓库
