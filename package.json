@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "new": "hexo new",
+    "help": "hexo -h",
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
@@ -28,7 +29,8 @@
     "hexo-renderer-swig": "^2.0.0",
     "hexo-server": "^3.0.0",
     "hexo-theme-landscape": "^1.0.0",
-    "hexo-theme-next": "^8.16.0"
+    "hexo-theme-next": "^8.16.0",
+    "hexo-word-counter": "^0.1.0"
   },
   "devDependencies": {
     "css": "^3.0.0"

@@ -97,6 +97,11 @@ include:
 exclude:
 ignore:
 
+# Post wordcount display settings
+symbols_count_time:
+  total_symbols: false
+  total_time: false
+
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
@@ -107,5 +112,6 @@ theme: next
 deploy:
   type: git
   repo: https://github.com/JinZhang-96/blog
+  # repo: https://gitee.com/meimingla/blog
   # example, https://github.com/hexojs/hexojs.github.io
   branch: gh-pages

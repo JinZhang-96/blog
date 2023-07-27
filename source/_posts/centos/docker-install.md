@@ -12,6 +12,8 @@ tags:
 [Docker](https://www.docker.com/) 是一款开源的虚拟化容器。  
 本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。
 
+<!-- more -->
+
 ## 准备环境
 
 在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：
@@ -43,7 +45,7 @@ $ sudo systemctl disable  firewalld     ( 禁用防火墙。重启操作系统�
 ``` bash
 $ ifconfig
 
-------------------------输入如下--------------------------  
+------------------------输出如下--------------------------  
 
 eno16777736: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 192.168.128.3  netmask 255.255.255.0  broadcast 192.168.128.255
@@ -115,8 +117,6 @@ $ sudo systemctl start network   （已关闭）
 
 如果没有在 `/etc/docker/daemon.json` 指定 storage-driver，  Docker 安装过程中发现 CentOS 文件系统类型不支持存储驱动类型时，会自动降级为支持的存储驱动类型。其中 vfs 存储驱动类型可以在任何文件系统类型中兼容， 保证了 Docker 在安装中能正确初始化存储驱动类型。
 
-<!-- 本机在 `/etc/docker/daemon.json` 文件中指定了 `"storage-driver":"overlay2"`，所以格式化分区为xfs文件系统，否则安装过程会报错。
-在分区格式化之前， 请确保重要数据进行备份，因为重新格式化文件系统将删除所有数据。 -->
 1. 查看各个分区文件类型。执行命令：  
 ``` bash
 $ lsblk -f
@@ -197,9 +197,9 @@ $ sudo yum remove docker \
                   docker-engine
 ```
 
-### 配置 Docker 仓库
+### 添加 Docker 仓库
 
-配置 Docker 阿里云镜像仓库，执行命令
+添加 Docker 阿里云镜像仓库，执行命令
 ``` bash
 $ sudo yum install -y yum-utils
 $ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
@@ -210,6 +210,19 @@ $ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/c
 ``` bash
 $ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
+### 修改 Docker 仓库
+
+ 编辑 `/etc/docker/daemon.json` 文件。执行命令：
+ ``` bash
+ $ vim /etc/docker/daemon.json
+
+向文件中添加下面的配置：
+
+ "registry-mirrors": [
+   "https://hub-mirror.c.163.com",
+   "https://mirror.baidubce.com"
+  ]
+ ```
 
 ### 启动 Docker 
 
