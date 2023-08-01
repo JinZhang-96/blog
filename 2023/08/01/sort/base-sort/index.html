@@ -21,16 +21,21 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jinzhang-96.github.io","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":true,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
-    <meta name="description" content="简单记录个人工作和生活">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Bay Blog">
-<meta property="og:url" content="https://jinzhang-96.github.io/blog/index.html">
+    <meta name="description" content="排序和查找是常见的编程基本算法，刚毕业时还曾花时间学习，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。   今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：    学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Radix Sort">
+<meta property="og:url" content="https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/index.html">
 <meta property="og:site_name" content="Bay Blog">
-<meta property="og:description" content="简单记录个人工作和生活">
+<meta property="og:description" content="排序和查找是常见的编程基本算法，刚毕业时还曾花时间学习，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。   今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：    学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-01T14:00:31.000Z">
+<meta property="article:modified_time" content="2023-08-01T15:06:45.654Z">
 <meta property="article:author" content="Bay">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="Sort">
+<meta property="article:tag" content="Radix Sort">
 <meta name="twitter:card" content="&lt;twitter:card&gt;">
-<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/%3Ctwitter:image%3E">
+<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/%3Ctwitter:image%3E">
 <meta name="twitter:creator" content="@&lt;twitter:creator&gt;">
 <meta name="twitter:site" content="<twitter:site>">
 <link rel="publisher" href="%3Cg+:profile_link%3E">
@@ -38,14 +43,14 @@
 <meta property="fb:app_id" content="&lt;fb:app_id&gt;">
 
 
-<link rel="canonical" href="https://jinzhang-96.github.io/blog/">
+<link rel="canonical" href="https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/","path":"2023/08/01/sort/base-sort/","title":"Radix Sort"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Bay Blog - Quick notes</title>
+<title>Radix Sort | Bay Blog</title>
   
 
 
@@ -78,7 +83,7 @@
 
     <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Bay Blog</h1>
+      <p class="site-title">Bay Blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Quick notes</p>
@@ -132,7 +137,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -145,6 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="nav-number">2.</span> <span class="nav-text">算法思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,16 +178,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,13 +202,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
+      <meta itemprop="name" content="Radix Sort | Bay Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/08/01/sort/base-sort/" class="post-title-link" itemprop="url">Radix Sort</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Radix Sort
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -229,6 +236,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
     <span class="post-meta-break"></span>
     <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
@@ -252,8 +266,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a target="_blank" rel="noopener" href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。  </p>
+    <div class="post-body" itemprop="articleBody"><p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a target="_blank" rel="noopener" href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。  </p>
 <p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：  </p>
 <blockquote>
 <p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
@@ -270,7 +283,6 @@
 
 
 
-      
     </div>
 
     
@@ -278,411 +290,77 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/blog/images/alipay.jpg" alt="Bay 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
 </div>
 
+          
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/28/relationship/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/28/relationship/" class="post-title-link" itemprop="url">relationship</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-28 09:44:48" itemprop="dateCreated datePublished" datetime="2023-07-28T09:44:48+08:00">2023-07-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-01 11:38:44" itemprop="dateModified" datetime="2023-08-01T11:38:44+08:00">2023-08-01</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>159</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Bay
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/" title="Radix Sort">https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
 </div>
 
-        </div>
-      </header>
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>一表人才  （要有内涵、修养）<br>二套西服  （在相应场合做合适的人）<br>三杯酒量  （和任何人要有话题说话）<br>四圈麻将  （有相同的社交游戏）<br>五方交友  （不看不起任何人，不排斥任何人）<br>六出祁山  （应该做就去做，不要考虑太多，行动力要强一些）<br>七术打马  （马屁要拍的有技术，不能让人感觉出来在拍马屁）<br>八口吹牛  （适当夸大一下）<br>九分努力  （自身一定要努力，有足够的实力）<br>十分忍耐  （有足够的忍耐力，不要随便发脾气）</p>
+  <div class="social-list">
 
-      
-    </div>
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/blog/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
 </div>
 
+          <div class="post-tags">
+              <a href="/blog/tags/Algorithm/" rel="tag"><i class="fa fa-tag"></i> Algorithm</a>
+              <a href="/blog/tags/Sort/" rel="tag"><i class="fa fa-tag"></i> Sort</a>
+              <a href="/blog/tags/Radix-Sort/" rel="tag"><i class="fa fa-tag"></i> Radix Sort</a>
+          </div>
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/27/doc-list/" class="post-title-link" itemprop="url">Doc List</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-07-27 20:13:23 / 修改时间：23:10:10" itemprop="dateCreated datePublished" datetime="2023-07-27T20:13:23+08:00">2023-07-27</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>16</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>记录一些常用的 API 文档  </p>
-<ol>
-<li><p><a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/23/centos/docker-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/23/centos/docker-install/" class="post-title-link" itemprop="url">Docker Install</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-23 23:19:15" itemprop="dateCreated datePublished" datetime="2023-07-23T23:19:15+08:00">2023-07-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-27 19:48:14" itemprop="dateModified" datetime="2023-07-27T19:48:14+08:00">2023-07-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/CentOS/" itemprop="url" rel="index"><span itemprop="name">CentOS</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/CentOS/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2023/07/23/centos/docker-install/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/23/hexo-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/23/hexo-guide/" class="post-title-link" itemprop="url">Hexo Guide</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-23 14:15:55" itemprop="dateCreated datePublished" datetime="2023-07-23T14:15:55+08:00">2023-07-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-01 18:44:25" itemprop="dateModified" datetime="2023-08-01T18:44:25+08:00">2023-08-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>3.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>12 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 是一个快速搭建博客网站的框架。<br>以下是官网的描述：</p>
-<blockquote>
-<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。  </p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2023/07/23/hexo-guide/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2023/07/28/relationship/" rel="prev" title="relationship">
+                  <i class="fa fa-chevron-left"></i> relationship
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
@@ -691,6 +369,8 @@
 
 
 
+
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -770,7 +450,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"aeeb3f9beb9de9d8a40e72b74dc3ab8e"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1c6c9a4412d22da3849a4bf4e06b4d2e"}</script>
 <script src="/blog/js/third-party/comments/gitalk.js"></script>
 
 </body>
