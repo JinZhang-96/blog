@@ -16,158 +16,6 @@
       </tags>
   </entry>
   <entry>
-    <title>relationship</title>
-    <url>/blog/2023/07/28/relationship/</url>
-    <content><![CDATA[<p>一表人才  （要有内涵、修养）<br>二套西服  （在相应场合做合适的人）<br>三杯酒量  （和任何人要有话题说话）<br>四圈麻将  （有相同的社交游戏）<br>五方交友  （不看不起任何人，不排斥任何人）<br>六出祁山  （应该做就去做，不要考虑太多，行动力要强一些）<br>七术打马  （马屁要拍的有技术，不能让人感觉出来在拍马屁）<br>八口吹牛  （适当夸大一下）<br>九分努力  （自身一定要努力，有足够的实力）<br>十分忍耐  （有足够的忍耐力，不要随便发脾气）</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Docker Install</title>
-    <url>/blog/2023/07/23/centos/docker-install/</url>
-    <content><![CDATA[<p><a href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
-<span id="more"></span>
-
-<h2 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h2><p>在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：</p>
-<ol>
-<li><p>可以正常访问网络</p>
-</li>
-<li><p>分区文件系统类型，支持 Docker 的存储驱动类型。</p>
-</li>
-<li><p>操作系统内核版本满足 Docker 的要求。</p>
-</li>
-</ol>
-<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>因为需要使用 yum 安装 docker ，所以要保证网络正常。<br>首先，执行 <code>ping www.baidu.com</code>，检查能否连接网络。<br>如果 ping 命令不能通过，则需要检查 firewalld 是否已关闭，网卡是否配置正确。</p>
-<h4 id="配置防火墙"><a href="#配置防火墙" class="headerlink" title="配置防火墙"></a>配置防火墙</h4><p>查看防火墙是否关闭，若开启中，则关闭 firewalld ，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ systemctl status firewalld            ( 查看防火墙状态 )</span><br><span class="line">$ sudo systemctl stop firewalld         ( 关闭防火墙 )</span><br><span class="line">$ sudo systemctl <span class="built_in">disable</span>  firewalld     ( 禁用防火墙。重启操作系统后，防火墙不会自动启动)</span><br></pre></td></tr></table></figure>
-<h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>查看网卡信息，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line"></span><br><span class="line">------------------------输出如下--------------------------  </span><br><span class="line"></span><br><span class="line">eno16777736: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.128.3  netmask 255.255.255.0  broadcast 192.168.128.255</span><br><span class="line">        inet6 fe80::20c:29ff:fe90:7a54  prefixlen 64  scopeid 0x20&lt;<span class="built_in">link</span>&gt;</span><br><span class="line">        ether 00:0c:29:90:7a:54  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 98076  bytes 117924104 (112.4 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 20565  bytes 1481553 (1.4 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
-<p>可以看到当前主机有 2 张网卡，其中名字为 lo 这张网卡为本地环回网卡，它的 IP 地址是 127.0.0.1（localhost），实现系统内部发送和接收数据，<br>无需配置；名字的前缀为 eno 的网卡实现与外部网络交换数据， 需要重新配置。  </p>
-<p>配置网卡，执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim /etc/sysconfig/network-script/ifcfg-[name]     <span class="comment"># name 为网卡的名字</span></span><br><span class="line"></span><br><span class="line">TYPE=Ethernet</span><br><span class="line">BOOTPROTO=static        <span class="comment"># static 使用静态 IP; dhcp 通过 dhcp 服务动态分配IP</span></span><br><span class="line">DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=<span class="built_in">yes</span></span><br><span class="line">IPV6_AUTOCONF=<span class="built_in">yes</span></span><br><span class="line">IPV6_DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">NAME=eno16777736</span><br><span class="line">UUID=2bd860aa-dcf9-4e5f-9297-63bfd3b5943c</span><br><span class="line">DEVICE=eno16777736</span><br><span class="line">ONBOOT=<span class="built_in">yes</span>              <span class="comment"># 指定是否在开机时启用该网卡</span></span><br><span class="line">IPADDR=192.168.128.3    <span class="comment"># 配置正确的网卡IP         BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">NETMASK=255.255.255.0   <span class="comment"># 配置正确的子网掩码       BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">GATEWAY=192.168.128.2   <span class="comment"># 配置正确的网关           BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">DNS1=192.168.128.2      <span class="comment"># 配置正确的DNS服务器， 如果错误会导致 IP 可以访问， 域名无法访问的问题</span></span><br><span class="line"></span><br><span class="line">:wq                     <span class="comment"># 保存并退出</span></span><br></pre></td></tr></table></figure>
-<p>其中IPADDR 、NETMASK 、GATEWAY 、DNS1 这 4 项不是固定的，要根据实际的网络环境配置。<br>当前主机的虚拟网络编辑器如（图一）所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/network.jpg" alt="(图一)"></p>
-<p>重启网卡，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl restart network （启动中）</span><br><span class="line">$ sudo systemctl start network   （已关闭）</span><br></pre></td></tr></table></figure>
-
-<h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>下表是 Docker 存储驱动类型和 CentOS 文件系统类型的对应关系：</p>
-<table>
-<thead>
-<tr>
-<th align="center">Storage driver</th>
-<th align="center">Supported backing filesystems</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">overlay2</td>
-<td align="center">xfs with ftype&#x3D;1, ext4</td>
-</tr>
-<tr>
-<td align="center">fuse-overlayfs</td>
-<td align="center">any filesystem</td>
-</tr>
-<tr>
-<td align="center">devicemapper</td>
-<td align="center">direct-lvm</td>
-</tr>
-<tr>
-<td align="center">btrfs</td>
-<td align="center">btrfs</td>
-</tr>
-<tr>
-<td align="center">zfs</td>
-<td align="center">zfs</td>
-</tr>
-<tr>
-<td align="center">vfs</td>
-<td align="center">any filesystem</td>
-</tr>
-</tbody></table>
-<p>如果没有在 <code>/etc/docker/daemon.json</code> 指定 storage-driver，  Docker 安装过程中发现 CentOS 文件系统类型不支持存储驱动类型时，会自动降级为支持的存储驱动类型。其中 vfs 存储驱动类型可以在任何文件系统类型中兼容， 保证了 Docker 在安装中能正确初始化存储驱动类型。</p>
-<ol>
-<li><p>查看各个分区文件类型。执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ lsblk -f</span><br></pre></td></tr></table></figure></li>
-<li><p>选择要分区的磁盘<br><strong>在分区格式化之前， 请确保重要数据进行备份，因为重新格式化文件系统将删除所有数据。</strong><br>例如，如果要分区的磁盘是&#x2F;dev&#x2F;sda，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo fdisk /dev/sda</span><br></pre></td></tr></table></figure>
-<p>在fdisk命令提示符下，可以使用以下命令进行分区：<br>n：创建一个新分区。<br>d：删除一个分区。<br>p：显示分区表。<br>w：保存并退出。<br>使用n命令创建一个新分区。根据提示输入分区的起始扇区和大小。<br>使用p命令查看分区表，确保分区已成功创建。<br>使用w命令保存并退出fdisk。</p>
-</li>
-<li><p>分区格式化，执行命令：<br>如果要分区的磁盘是&#x2F;dev&#x2F;sda</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mkfs.xfs -n ftype=1 /dev/sda</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>挂载重新格式化的文件系统。运行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mount -o ftype=1 /dev/sda /var/lib/docker</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p>本机安装的 Docker 为 24.0.4 ，要求内核版本为 3.10 或更高版本。<br>如果内核版本过低， Docker 安装之后， 容器暴露的接口，将会无法访问。</p>
-<ol>
-<li>查看当前系统的内核版本，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
-<li>更新系统软件包列表，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum update</span><br></pre></td></tr></table></figure></li>
-<li>安装 ELRepo 存储库，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm</span><br></pre></td></tr></table></figure></li>
-<li>安装最新的稳定内核版本，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum --enablerepo=elrepo-kernel install kernel-ml</span><br></pre></td></tr></table></figure></li>
-<li>更新 GRUB 配置以使用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg</span><br></pre></td></tr></table></figure></li>
-<li>重启系统以应用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo reboot</span><br></pre></td></tr></table></figure></li>
-<li>重启后，确认内核版本是否已成功升级，执行命令：。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="清理-Docker"><a href="#清理-Docker" class="headerlink" title="清理 Docker"></a>清理 Docker</h3><p>移除之前安装的 Docker，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
-
-<h3 id="添加-Docker-仓库"><a href="#添加-Docker-仓库" class="headerlink" title="添加 Docker 仓库"></a>添加 Docker 仓库</h3><p>添加 Docker 阿里云镜像仓库，执行命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils</span><br><span class="line">$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
-<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><p>安装 docker 依赖，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
-<h3 id="修改-Docker-仓库"><a href="#修改-Docker-仓库" class="headerlink" title="修改 Docker 仓库"></a>修改 Docker 仓库</h3><p> 编辑 <code>/etc/docker/daemon.json</code> 文件。执行命令：<br> <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> $ vim /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line">向文件中添加下面的配置：</span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line">   <span class="string">&quot;https://hub-mirror.c.163.com&quot;</span>,</span><br><span class="line">   <span class="string">&quot;https://mirror.baidubce.com&quot;</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
-<h3 id="启动-Docker"><a href="#启动-Docker" class="headerlink" title="启动 Docker"></a>启动 Docker</h3><p>启动 Docker，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
-
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
-<li><p>拉取 Nginx 镜像，执行命令： </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker pull nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行 Nginx ，并暴露 80 接口，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker run nginx -d -p 80:80</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>检查是否启动成功<br>浏览器访问 <code>http://192.168.128.3</code>， 如(图二)所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/nginx.jpg" alt="(图二)"></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>CentOS</category>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Docker</tag>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Radix Sort</title>
-    <url>/blog/2023/08/01/sort/base-sort/</url>
-    <content><![CDATA[<p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。  </p>
-<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：  </p>
-<blockquote>
-<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
-</blockquote>
-<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个很稳定并且高效的算法。</p>
-<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据的进制 radix 影响，如 10 进制的数据，则 radix 为 10。<br>其时间复杂度公式为 <code>n * radix</code>。</p>
-<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的遗传，一步步进行推导，来确定数据最终的顺序性。</p>
-<ol>
-<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
-<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
-<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
-</ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 生成待排序数据 */</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打印待排序完的数据 */</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> baseSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数组</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">baseSort</span>(data, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打印排序完的数据 */</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>Algorithm</category>
-        <category>Sort</category>
-      </categories>
-      <tags>
-        <tag>Algorithm</tag>
-        <tag>Sort</tag>
-        <tag>Radix Sort</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo Guide</title>
     <url>/blog/2023/07/23/hexo-guide/</url>
     <content><![CDATA[<p><a href="https://hexo.io/">Hexo</a> 是一个快速搭建博客网站的框架。<br>以下是官网的描述：</p>
@@ -732,6 +580,156 @@
       </categories>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>relationship</title>
+    <url>/blog/2023/07/28/relationship/</url>
+    <content><![CDATA[<p>一表人才  （要有内涵、修养）<br>二套西服  （在相应场合做合适的人）<br>三杯酒量  （和任何人要有话题说话）<br>四圈麻将  （有相同的社交游戏）<br>五方交友  （不看不起任何人，不排斥任何人）<br>六出祁山  （应该做就去做，不要考虑太多，行动力要强一些）<br>七术打马  （马屁要拍的有技术，不能让人感觉出来在拍马屁）<br>八口吹牛  （适当夸大一下）<br>九分努力  （自身一定要努力，有足够的实力）<br>十分忍耐  （有足够的忍耐力，不要随便发脾气）</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Docker Install</title>
+    <url>/blog/2023/07/23/centos/docker-install/</url>
+    <content><![CDATA[<p><a href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
+<span id="more"></span>
+
+<h2 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h2><p>在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：</p>
+<ol>
+<li><p>可以正常访问网络</p>
+</li>
+<li><p>分区文件系统类型，支持 Docker 的存储驱动类型。</p>
+</li>
+<li><p>操作系统内核版本满足 Docker 的要求。</p>
+</li>
+</ol>
+<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>因为需要使用 yum 安装 docker ，所以要保证网络正常。<br>首先，执行 <code>ping www.baidu.com</code>，检查能否连接网络。<br>如果 ping 命令不能通过，则需要检查 firewalld 是否已关闭，网卡是否配置正确。</p>
+<h4 id="配置防火墙"><a href="#配置防火墙" class="headerlink" title="配置防火墙"></a>配置防火墙</h4><p>查看防火墙是否关闭，若开启中，则关闭 firewalld ，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ systemctl status firewalld            ( 查看防火墙状态 )</span><br><span class="line">$ sudo systemctl stop firewalld         ( 关闭防火墙 )</span><br><span class="line">$ sudo systemctl <span class="built_in">disable</span>  firewalld     ( 禁用防火墙。重启操作系统后，防火墙不会自动启动)</span><br></pre></td></tr></table></figure>
+<h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>查看网卡信息，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line"></span><br><span class="line">------------------------输出如下--------------------------  </span><br><span class="line"></span><br><span class="line">eno16777736: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.128.3  netmask 255.255.255.0  broadcast 192.168.128.255</span><br><span class="line">        inet6 fe80::20c:29ff:fe90:7a54  prefixlen 64  scopeid 0x20&lt;<span class="built_in">link</span>&gt;</span><br><span class="line">        ether 00:0c:29:90:7a:54  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 98076  bytes 117924104 (112.4 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 20565  bytes 1481553 (1.4 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+<p>可以看到当前主机有 2 张网卡，其中名字为 lo 这张网卡为本地环回网卡，它的 IP 地址是 127.0.0.1（localhost），实现系统内部发送和接收数据，<br>无需配置；名字的前缀为 eno 的网卡实现与外部网络交换数据， 需要重新配置。  </p>
+<p>配置网卡，执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim /etc/sysconfig/network-script/ifcfg-[name]     <span class="comment"># name 为网卡的名字</span></span><br><span class="line"></span><br><span class="line">TYPE=Ethernet</span><br><span class="line">BOOTPROTO=static        <span class="comment"># static 使用静态 IP; dhcp 通过 dhcp 服务动态分配IP</span></span><br><span class="line">DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=<span class="built_in">yes</span></span><br><span class="line">IPV6_AUTOCONF=<span class="built_in">yes</span></span><br><span class="line">IPV6_DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">NAME=eno16777736</span><br><span class="line">UUID=2bd860aa-dcf9-4e5f-9297-63bfd3b5943c</span><br><span class="line">DEVICE=eno16777736</span><br><span class="line">ONBOOT=<span class="built_in">yes</span>              <span class="comment"># 指定是否在开机时启用该网卡</span></span><br><span class="line">IPADDR=192.168.128.3    <span class="comment"># 配置正确的网卡IP         BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">NETMASK=255.255.255.0   <span class="comment"># 配置正确的子网掩码       BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">GATEWAY=192.168.128.2   <span class="comment"># 配置正确的网关           BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">DNS1=192.168.128.2      <span class="comment"># 配置正确的DNS服务器， 如果错误会导致 IP 可以访问， 域名无法访问的问题</span></span><br><span class="line"></span><br><span class="line">:wq                     <span class="comment"># 保存并退出</span></span><br></pre></td></tr></table></figure>
+<p>其中IPADDR 、NETMASK 、GATEWAY 、DNS1 这 4 项不是固定的，要根据实际的网络环境配置。<br>当前主机的虚拟网络编辑器如（图一）所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/network.jpg" alt="(图一)"></p>
+<p>重启网卡，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl restart network （启动中）</span><br><span class="line">$ sudo systemctl start network   （已关闭）</span><br></pre></td></tr></table></figure>
+
+<h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>下表是 Docker 存储驱动类型和 CentOS 文件系统类型的对应关系：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Storage driver</th>
+<th align="center">Supported backing filesystems</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">overlay2</td>
+<td align="center">xfs with ftype&#x3D;1, ext4</td>
+</tr>
+<tr>
+<td align="center">fuse-overlayfs</td>
+<td align="center">any filesystem</td>
+</tr>
+<tr>
+<td align="center">devicemapper</td>
+<td align="center">direct-lvm</td>
+</tr>
+<tr>
+<td align="center">btrfs</td>
+<td align="center">btrfs</td>
+</tr>
+<tr>
+<td align="center">zfs</td>
+<td align="center">zfs</td>
+</tr>
+<tr>
+<td align="center">vfs</td>
+<td align="center">any filesystem</td>
+</tr>
+</tbody></table>
+<p>如果没有在 <code>/etc/docker/daemon.json</code> 指定 storage-driver，  Docker 安装过程中发现 CentOS 文件系统类型不支持存储驱动类型时，会自动降级为支持的存储驱动类型。其中 vfs 存储驱动类型可以在任何文件系统类型中兼容， 保证了 Docker 在安装中能正确初始化存储驱动类型。</p>
+<ol>
+<li><p>查看各个分区文件类型。执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ lsblk -f</span><br></pre></td></tr></table></figure></li>
+<li><p>选择要分区的磁盘<br><strong>在分区格式化之前， 请确保重要数据进行备份，因为重新格式化文件系统将删除所有数据。</strong><br>例如，如果要分区的磁盘是&#x2F;dev&#x2F;sda，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo fdisk /dev/sda</span><br></pre></td></tr></table></figure>
+<p>在fdisk命令提示符下，可以使用以下命令进行分区：<br>n：创建一个新分区。<br>d：删除一个分区。<br>p：显示分区表。<br>w：保存并退出。<br>使用n命令创建一个新分区。根据提示输入分区的起始扇区和大小。<br>使用p命令查看分区表，确保分区已成功创建。<br>使用w命令保存并退出fdisk。</p>
+</li>
+<li><p>分区格式化，执行命令：<br>如果要分区的磁盘是&#x2F;dev&#x2F;sda</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mkfs.xfs -n ftype=1 /dev/sda</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂载重新格式化的文件系统。运行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mount -o ftype=1 /dev/sda /var/lib/docker</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p>本机安装的 Docker 为 24.0.4 ，要求内核版本为 3.10 或更高版本。<br>如果内核版本过低， Docker 安装之后， 容器暴露的接口，将会无法访问。</p>
+<ol>
+<li>查看当前系统的内核版本，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
+<li>更新系统软件包列表，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum update</span><br></pre></td></tr></table></figure></li>
+<li>安装 ELRepo 存储库，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm</span><br></pre></td></tr></table></figure></li>
+<li>安装最新的稳定内核版本，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum --enablerepo=elrepo-kernel install kernel-ml</span><br></pre></td></tr></table></figure></li>
+<li>更新 GRUB 配置以使用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg</span><br></pre></td></tr></table></figure></li>
+<li>重启系统以应用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo reboot</span><br></pre></td></tr></table></figure></li>
+<li>重启后，确认内核版本是否已成功升级，执行命令：。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="清理-Docker"><a href="#清理-Docker" class="headerlink" title="清理 Docker"></a>清理 Docker</h3><p>移除之前安装的 Docker，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-Docker-仓库"><a href="#添加-Docker-仓库" class="headerlink" title="添加 Docker 仓库"></a>添加 Docker 仓库</h3><p>添加 Docker 阿里云镜像仓库，执行命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils</span><br><span class="line">$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><p>安装 docker 依赖，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+<h3 id="修改-Docker-仓库"><a href="#修改-Docker-仓库" class="headerlink" title="修改 Docker 仓库"></a>修改 Docker 仓库</h3><p> 编辑 <code>/etc/docker/daemon.json</code> 文件。执行命令：<br> <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> $ vim /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line">向文件中添加下面的配置：</span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line">   <span class="string">&quot;https://hub-mirror.c.163.com&quot;</span>,</span><br><span class="line">   <span class="string">&quot;https://mirror.baidubce.com&quot;</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动-Docker"><a href="#启动-Docker" class="headerlink" title="启动 Docker"></a>启动 Docker</h3><p>启动 Docker，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li><p>拉取 Nginx 镜像，执行命令： </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker pull nginx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行 Nginx ，并暴露 80 接口，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker run nginx -d -p 80:80</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查是否启动成功<br>浏览器访问 <code>http://192.168.128.3</code>， 如(图二)所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/nginx.jpg" alt="(图二)"></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CentOS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Docker</tag>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Radix Sort</title>
+    <url>/blog/2023/08/01/sort/base-sort/</url>
+    <content><![CDATA[<p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。</p>
+<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：</p>
+<blockquote>
+<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
+</blockquote>
+<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个很稳定并且高效的算法。</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据的进制 radix 影响，如 10 进制的数据，则 radix 为 10。<br>其时间复杂度公式为 <code>n * radix</code>。</p>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的遗传，一步步进行推导，来确定数据最终的顺序性。</p>
+<ol>
+<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
+<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
+<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 生成待排序数据 */</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打印待排序完的数据 */</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> baseSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数组</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">baseSort</span>(data, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打印排序完的数据 */</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Algorithm</category>
+        <category>Sort</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
+        <tag>Sort</tag>
+        <tag>Radix Sort</tag>
       </tags>
   </entry>
 </search>
