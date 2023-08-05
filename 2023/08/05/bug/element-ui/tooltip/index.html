@@ -21,16 +21,21 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jinzhang-96.github.io","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":true,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
-    <meta name="description" content="简单记录个人工作和生活">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Bay Blog">
-<meta property="og:url" content="https://jinzhang-96.github.io/blog/index.html">
+    <meta name="description" content="使用 Vite 搭建了一个 UI 组件库， 开发过程中发现 引用的 Element UI 中的 Tooltip 组件无法正常展示。问题解决方法如下： Bug 原因组件库有一个测试页面，使用 vue 初始化： 1234567891011121314151617181920&lt;!DOCTYPE html&gt;&lt;html&gt;  &lt;head&gt;    &lt;title&gt;测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Element UI 之 Tooltip 组件不展示">
+<meta property="og:url" content="https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/index.html">
 <meta property="og:site_name" content="Bay Blog">
-<meta property="og:description" content="简单记录个人工作和生活">
+<meta property="og:description" content="使用 Vite 搭建了一个 UI 组件库， 开发过程中发现 引用的 Element UI 中的 Tooltip 组件无法正常展示。问题解决方法如下： Bug 原因组件库有一个测试页面，使用 vue 初始化： 1234567891011121314151617181920&lt;!DOCTYPE html&gt;&lt;html&gt;  &lt;head&gt;    &lt;title&gt;测">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-05T04:50:55.120Z">
+<meta property="article:modified_time" content="2023-08-05T05:58:16.042Z">
 <meta property="article:author" content="Bay">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Element UI">
+<meta property="article:tag" content="Tooltip">
 <meta name="twitter:card" content="&lt;twitter:card&gt;">
-<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/%3Ctwitter:image%3E">
+<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/%3Ctwitter:image%3E">
 <meta name="twitter:creator" content="@&lt;twitter:creator&gt;">
 <meta name="twitter:site" content="<twitter:site>">
 <link rel="publisher" href="%3Cg+:profile_link%3E">
@@ -38,14 +43,14 @@
 <meta property="fb:app_id" content="&lt;fb:app_id&gt;">
 
 
-<link rel="canonical" href="https://jinzhang-96.github.io/blog/">
+<link rel="canonical" href="https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/","path":"2023/08/05/bug/element-ui/tooltip/","title":"Element UI 之 Tooltip 组件不展示"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Bay Blog - Quick notes</title>
+<title>Element UI 之 Tooltip 组件不展示 | Bay Blog</title>
   
 
 
@@ -78,7 +83,7 @@
 
     <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Bay Blog</h1>
+      <p class="site-title">Bay Blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Quick notes</p>
@@ -132,7 +137,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -145,6 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bug-%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">Bug 原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">解决办法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E6%9F%A5%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">排查过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,16 +178,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,13 +202,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
+      <meta itemprop="name" content="Element UI 之 Tooltip 组件不展示 | Bay Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/08/05/bug/element-ui/tooltip/" class="post-title-link" itemprop="url">Element UI 之 Tooltip 组件不展示</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Element UI 之 Tooltip 组件不展示
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -225,6 +232,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
     <span class="post-meta-break"></span>
     <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
@@ -248,8 +262,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <p>使用 Vite 搭建了一个 UI 组件库， 开发过程中发现 引用的 Element UI 中的 Tooltip 组件无法正常展示。问题解决方法如下：</p>
+    <div class="post-body" itemprop="articleBody"><p>使用 Vite 搭建了一个 UI 组件库， 开发过程中发现 引用的 Element UI 中的 Tooltip 组件无法正常展示。问题解决方法如下：</p>
 <h2 id="Bug-原因"><a href="#Bug-原因" class="headerlink" title="Bug 原因"></a>Bug 原因</h2><p>组件库有一个测试页面，使用 vue 初始化：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>测试<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">el-tooltip</span></span></span><br><span class="line"><span class="tag">        <span class="attr">class</span>=<span class="string">&quot;item&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">effect</span>=<span class="string">&quot;dark&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">content</span>=<span class="string">&quot;Top Center 提示文字&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">placement</span>=<span class="string">&quot;top&quot;</span></span></span><br><span class="line"><span class="tag">      &gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">el-button</span>&gt;</span>上边<span class="tag">&lt;/<span class="name">el-button</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">el-tooltip</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./index.tsx&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -288,7 +301,6 @@
 <p>我看其他项目没问题，只能先按照其他项目来写， 经过对比，发现我使用了全量版本的 vue。 就猜到是 vue 的问题了。。。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>搭项目的过程中，有一个其他项目做参考，能够较快的找到问题的原因，这样才能有效避免时间浪费在非有效工作上面。<br>以此为前车之鉴吧！</p>
 
-      
     </div>
 
     
@@ -296,537 +308,77 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/blog/images/alipay.jpg" alt="Bay 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
 </div>
 
+          
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/08/01/sort/base-sort/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/08/01/sort/base-sort/" class="post-title-link" itemprop="url">Radix Sort</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-08-01 22:00:31 / 修改时间：23:59:34" itemprop="dateCreated datePublished" datetime="2023-08-01T22:00:31+08:00">2023-08-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/Algorithm/Sort/" itemprop="url" rel="index"><span itemprop="name">Sort</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>630</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Bay
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/" title="Element UI 之 Tooltip 组件不展示">https://jinzhang-96.github.io/blog/2023/08/05/bug/element-ui/tooltip/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
 </div>
 
-        </div>
-      </header>
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a target="_blank" rel="noopener" href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。</p>
-<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：</p>
-<blockquote>
-<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
-</blockquote>
-<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个很稳定并且高效的算法。</p>
-<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据最大数位数 k 的影响，如最大数位数为 10，则 k 为 10。<br>其时间复杂度公式为 <code>O(n * k)</code>。</p>
-<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的遗传，一步步进行推导，来确定数据最终的顺序性。</p>
-<ol>
-<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
-<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
-<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
-</ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 生成待排序数据 */</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打印待排序的数据 */</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> radixSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">radixSort</span>(data, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 打印排序完的数据 */</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
+  <div class="social-list">
 
-      
-    </div>
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/blog/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
 </div>
 
+          <div class="post-tags">
+              <a href="/blog/tags/Vue/" rel="tag"><i class="fa fa-tag"></i> Vue</a>
+              <a href="/blog/tags/Element-UI/" rel="tag"><i class="fa fa-tag"></i> Element UI</a>
+              <a href="/blog/tags/Tooltip/" rel="tag"><i class="fa fa-tag"></i> Tooltip</a>
+          </div>
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/28/relationship/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/28/relationship/" class="post-title-link" itemprop="url">relationship</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-28 09:44:48" itemprop="dateCreated datePublished" datetime="2023-07-28T09:44:48+08:00">2023-07-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-01 11:38:44" itemprop="dateModified" datetime="2023-08-01T11:38:44+08:00">2023-08-01</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>159</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>一表人才  （要有内涵、修养）<br>二套西服  （在相应场合做合适的人）<br>三杯酒量  （和任何人要有话题说话）<br>四圈麻将  （有相同的社交游戏）<br>五方交友  （不看不起任何人，不排斥任何人）<br>六出祁山  （应该做就去做，不要考虑太多，行动力要强一些）<br>七术打马  （马屁要拍的有技术，不能让人感觉出来在拍马屁）<br>八口吹牛  （适当夸大一下）<br>九分努力  （自身一定要努力，有足够的实力）<br>十分忍耐  （有足够的忍耐力，不要随便发脾气）</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/27/doc-list/" class="post-title-link" itemprop="url">Doc List</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-27 20:13:23" itemprop="dateCreated datePublished" datetime="2023-07-27T20:13:23+08:00">2023-07-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-05 12:54:38" itemprop="dateModified" datetime="2023-08-05T12:54:38+08:00">2023-08-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/Help/" itemprop="url" rel="index"><span itemprop="name">Help</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>16</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>记录一些常用的 API 文档  </p>
-<ol>
-<li><p><a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/23/centos/docker-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/23/centos/docker-install/" class="post-title-link" itemprop="url">Docker Install</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-23 23:19:15" itemprop="dateCreated datePublished" datetime="2023-07-23T23:19:15+08:00">2023-07-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-27 19:48:14" itemprop="dateModified" datetime="2023-07-27T19:48:14+08:00">2023-07-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/CentOS/" itemprop="url" rel="index"><span itemprop="name">CentOS</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/CentOS/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2023/07/23/centos/docker-install/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/23/hexo-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Bay">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bay Blog">
-      <meta itemprop="description" content="简单记录个人工作和生活">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Bay Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/07/23/hexo-guide/" class="post-title-link" itemprop="url">Hexo Guide</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-23 14:15:55" itemprop="dateCreated datePublished" datetime="2023-07-23T14:15:55+08:00">2023-07-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-01 18:44:25" itemprop="dateModified" datetime="2023-08-01T18:44:25+08:00">2023-08-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>3.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>12 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 是一个快速搭建博客网站的框架。<br>以下是官网的描述：</p>
-<blockquote>
-<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。  </p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2023/07/23/hexo-guide/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2023/08/01/sort/base-sort/" rel="prev" title="Radix Sort">
+                  <i class="fa fa-chevron-left"></i> Radix Sort
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
@@ -835,6 +387,8 @@
 
 
 
+
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -914,7 +468,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"aeeb3f9beb9de9d8a40e72b74dc3ab8e"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"7644cfb934d29bb93f961f9cd7fcf294"}</script>
 <script src="/blog/js/third-party/comments/gitalk.js"></script>
 
 </body>
