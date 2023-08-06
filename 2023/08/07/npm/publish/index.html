@@ -21,19 +21,21 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jinzhang-96.github.io","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":true,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
-    <meta name="description" content="记录一些常用的 API 文档">
+    <meta name="description" content="平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。为什么不发布到 npm 仓库呢？发布到仓库后，我们在其他项目中使用时只需要使用 npm i xxx 命令安装就可以了。   发布一个包通常包含以下几步操作，没有任何难度：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Doc List">
-<meta property="og:url" content="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/index.html">
+<meta property="og:title" content="发布 npm 包">
+<meta property="og:url" content="https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/index.html">
 <meta property="og:site_name" content="Bay Blog">
-<meta property="og:description" content="记录一些常用的 API 文档">
+<meta property="og:description" content="平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。为什么不发布到 npm 仓库呢？发布到仓库后，我们在其他项目中使用时只需要使用 npm i xxx 命令安装就可以了。   发布一个包通常包含以下几步操作，没有任何难度：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-07-27T12:13:23.484Z">
-<meta property="article:modified_time" content="2023-08-06T18:24:17.573Z">
+<meta property="og:image" content="https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/package.jpg">
+<meta property="article:published_time" content="2023-08-06T19:06:35.000Z">
+<meta property="article:modified_time" content="2023-08-06T19:17:12.226Z">
 <meta property="article:author" content="Bay">
-<meta property="article:tag" content="Doc">
+<meta property="article:tag" content="npm">
+<meta property="article:tag" content="publish">
 <meta name="twitter:card" content="&lt;twitter:card&gt;">
-<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/%3Ctwitter:image%3E">
+<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/%3Ctwitter:image%3E">
 <meta name="twitter:creator" content="@&lt;twitter:creator&gt;">
 <meta name="twitter:site" content="<twitter:site>">
 <link rel="publisher" href="%3Cg+:profile_link%3E">
@@ -41,14 +43,14 @@
 <meta property="fb:app_id" content="&lt;fb:app_id&gt;">
 
 
-<link rel="canonical" href="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/">
+<link rel="canonical" href="https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jinzhang-96.github.io/blog/2023/07/27/doc-list/","path":"2023/07/27/doc-list/","title":"Doc List"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/","path":"2023/08/07/npm/publish/","title":"发布 npm 包"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Doc List | Bay Blog</title>
+<title>发布 npm 包 | Bay Blog</title>
   
 
 
@@ -135,7 +137,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C-npm-%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.</span> <span class="nav-text">注册 npm 账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7"><span class="nav-number">2.</span> <span class="nav-text">登录账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E9%A1%B9%E7%9B%AE"><span class="nav-number">3.</span> <span class="nav-text">配置项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B8%83"><span class="nav-number">4.</span> <span class="nav-text">发布</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -186,7 +189,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/">
+    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/blog/images/avatar.gif">
@@ -199,12 +202,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Doc List | Bay Blog">
+      <meta itemprop="name" content="发布 npm 包 | Bay Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Doc List
+          发布 npm 包
         </h1>
 
         <div class="post-meta-container">
@@ -214,15 +217,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2023-07-27 20:13:23" itemprop="dateCreated datePublished" datetime="2023-07-27T20:13:23+08:00">2023-07-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-07 02:24:17" itemprop="dateModified" datetime="2023-08-07T02:24:17+08:00">2023-08-07</time>
+      <time title="创建时间：2023-08-07 03:06:35 / 修改时间：03:17:12" itemprop="dateCreated datePublished" datetime="2023-08-07T03:06:35+08:00">2023-08-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -230,7 +227,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/blog/categories/Help/" itemprop="url" rel="index"><span itemprop="name">Help</span></a>
+          <a href="/blog/categories/npm/" itemprop="url" rel="index"><span itemprop="name">npm</span></a>
         </span>
     </span>
 
@@ -248,7 +245,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>27</span>
+      <span>389</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -265,23 +262,27 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>记录一些常用的 API 文档  </p>
+    <div class="post-body" itemprop="articleBody"><p>平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。<br>为什么不发布到 <a target="_blank" rel="noopener" href="https://docs.npmjs.com/">npm</a> 仓库呢？<br>发布到仓库后，我们在其他项目中使用时只需要使用 <code>npm i xxx</code> 命令安装就可以了。  </p>
+<p>发布一个包通常包含以下几步操作，没有任何难度：  </p>
 <span id="more"></span>
 
+<h2 id="注册-npm-账号"><a href="#注册-npm-账号" class="headerlink" title="注册 npm 账号"></a>注册 npm 账号</h2><p>要往 npm 发布包，首先要有一个 npm 账号，可以在 <code>https://www.npmjs.com/signup</code> 进行注册。</p>
+<h2 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h2><p>在项目中使用 <code>npm login</code> 命令登录注册的账号。<br>登录完成后，使用 <code>npm whoami</code> 命令查看当前登录的账号，确认是否登录成功。</p>
+<h2 id="配置项目"><a href="#配置项目" class="headerlink" title="配置项目"></a>配置项目</h2><p>发布包之前，请确保项目已经符合发布的标准，别人安装后能正常使用。  </p>
+<p>一般需要正确配置以下：  </p>
 <ol>
-<li><p><a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
+<li><p><code>package.json</code> 文件中 <code>dependencies</code> 配置正确的依赖。  </p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
+<li><p><code>package.json</code> 文件中 <code>main</code> 配置正确的入口文件，这样在项目中才能正确导入模块。</p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://zhonghui.chat/">ChatGPT</a></p>
+<li><p>构建项目</p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://leafletjs.com/index.html">leafletjs</a></p>
+<li><p>npm 的 registry 必须是 <code>https://registry.npmjs.org/</code>，如果配置了代理镜像，请改过来。</p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://geekdaxue.co/read/leaflet-cn/v1.9.3-doc">leafletjs 中文</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc7946#autoid-1">GeoJSON</a></p>
+<li><p>确保包名唯一。包名就是  <code>package.json</code> 文件中 <code>name</code> 的值，可使用 <code> npm view &lt;name&gt;</code> 命令查看此包名是否存在。</p>
 </li>
 </ol>
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><p>使用 <code>npm publish</code> 发布本地包到 npm registry，发布成功后。可以在 <code>https://www.npmjs.com/</code> 网站登录自己的账号，进入 packages 页面查看是否发布成功，如（图一）所示:<br><img data-src="/blog/2023/08/07/npm/publish/package.jpg" alt="(图一)"></p>
 
     </div>
 
@@ -313,7 +314,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jinzhang-96.github.io/blog/2023/07/27/doc-list/" title="Doc List">https://jinzhang-96.github.io/blog/2023/07/27/doc-list/</a>
+      <a href="https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/" title="发布 npm 包">https://jinzhang-96.github.io/blog/2023/08/07/npm/publish/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -339,7 +340,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/blog/tags/Doc/" rel="tag"><i class="fa fa-tag"></i> Doc</a>
+              <a href="/blog/tags/npm/" rel="tag"><i class="fa fa-tag"></i> npm</a>
+              <a href="/blog/tags/publish/" rel="tag"><i class="fa fa-tag"></i> publish</a>
           </div>
 
         
@@ -352,14 +354,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/blog/2023/07/23/centos/docker-install/" rel="prev" title="Docker Install">
-                  <i class="fa fa-chevron-left"></i> Docker Install
+                <a href="/blog/2023/08/05/bug/element-ui/tooltip/" rel="prev" title="Element-ui 之 Tooltip 无法展示">
+                  <i class="fa fa-chevron-left"></i> Element-ui 之 Tooltip 无法展示
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/blog/2023/08/01/sort/base-sort/" rel="next" title="Radix Sort">
-                  Radix Sort <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -451,7 +450,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9b44fde4392d785342f3a2c6bbbb1073"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"88bcc4a40570ea4d486b372e72e5194d"}</script>
 <script src="/blog/js/third-party/comments/gitalk.js"></script>
 
 </body>
