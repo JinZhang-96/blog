@@ -5,9 +5,9 @@ categories:
 tags:
 - hexo
 ---
-[Hexo](https://hexo.io/) 是一个可以帮助我们快速搭建博客网站的框架。
+[Hexo](https://hexo.io/) 是一个快速搭建博客网站的框架。
 以下是官网的描述：
-Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。  
+> Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。  
 
 <!-- more -->
 
@@ -106,7 +106,7 @@ $ npm install theme
 ```
 ### 配置（5.0.0 版本及以上）
 
-|      参数	  |     描述    |
+|      参数	   |     描述    |
 |--------------|-------------|
 |theme         |	当前主题名称。值为false时禁用主题                                    |
 |theme_config  |	主题的配置文件。在这里放置的配置会覆盖主题目录下的 _config.yml 中的配置|
@@ -164,8 +164,11 @@ GitHub Pages 是 [Github](https://github.com/) 提供的免费服务，它可以
 到此为止，Hexo的安装、启动、配置、发布就介绍完了。
 
 
----------------------------------------------------------------------------
+---
+
 **以下是Hexo的一些配置参数说明和命令说明，可以进行参考：**
+
+---
 
 ## 配置
 
@@ -242,9 +245,9 @@ tag_map|	标签别名
 Hexo 使用 [Moment.js](http://momentjs.com/) 来解析和显示时间。
 
 |参数	|描述|默认值|
-|---|----|----|
-date_format|	日期格式|	YYYY-MM-DD
-time_format|	时间格式|	HH:mm:ss
+|----------|----------|----|
+date_format|日期格式|	YYYY-MM-DD
+time_format|时间格式|	HH:mm:ss
 updated_option|	当 Front Matter 中没有指定 updated 时 updated 的取值|	mtime	
 
 ### 分页

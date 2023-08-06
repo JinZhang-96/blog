@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "new": "hexo new",
+    "post": "hexo new post",
+    "draft": "hexo new draft",
+    "publish": "hexo publish",
     "help": "hexo -h",
     "build": "hexo generate",
     "clean": "hexo clean",
