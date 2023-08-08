@@ -101,7 +101,7 @@ ignore:
 symbols_count_time:
   total_symbols: false
   total_time: false
-
+  
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/

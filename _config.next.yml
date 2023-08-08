@@ -525,9 +525,10 @@ pdf:
   # Default height
   height: 500px
 
-# Mermaid tag
+# Mermaid tag 
+# See: https://github.com/webappdevelp/hexo-filter-mermaid-diagrams
 mermaid:
-  enable: false
+  enable: true
   # Available themes: default | dark | forest | neutral
   theme:
     light: default
