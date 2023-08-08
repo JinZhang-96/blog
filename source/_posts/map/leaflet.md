@@ -361,6 +361,33 @@ Renderer <|-- SVG
 
 使用 leaflet.js 编程，基本上是对上面的几个类进行操作，下面实现几个常用的需求：
 
+### 设置地图瓦片
+
+```javascript
+import { tileLayer } from "leaflet";
+
+const tiltUrl =
+  "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}";
+const tileLayer = tileLayer(tiltUrl, {
+  maxZoom: 18,
+  minZoom: 1,
+  zIndex: 1,
+});
+mapInstance.addLayer(tileLayer);
+```
+
+tiltUrl 是地图瓦片的网络地址，所以这块是很灵活的，可以随意的切换想用的地图。
+以下是几种地图瓦片的网络地址：
+
+- 高德 http://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}
+
+- http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}
+
+- http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}
+
+如 (图一)  
+![(图一)]
+
 ### 在地图上画地区边界  
 
 ```javascript
@@ -371,36 +398,18 @@ const polygonLayer = geoJSON(polygonGeojson, {
   zIndex: 2,
 });
 mapInstance.addLayer(polygonLayer);
-```  
-其中 polygonGeojson 变量是一个 Polygon 或者 MultiPolygon 类型的 GeoJSON 数据。
-数据可以在 [Data V](http://datav.aliyun.com/portal/school/atlas/area_selector) 获取。  
-[GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946#autoid-1) 是一种用于编码各种地理数据的格式，使用 JavaScript 对象表示（JSON）的结构。
 
-### 设置地图瓦片
-
-```javascript
-import { tileLayer } from "leaflet";
-
-const tiltUrl =
-  "http://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}";
-const tileLayer = tileLayer(tiltUrl, {
-  maxZoom: 18,
-  minZoom: 1,
-  zIndex: 1,
-});
-mapInstance.addLayer(tileLayer);
 ```
 
-tiltUrl 是地图瓦片的网络地址，所以这块是很灵活的，可以随意的切换想用的地图。
-以下是几种地图瓦片的网络地址： 
+其中 polygonGeojson 变量是一个 Polygon 或者 MultiPolygon 类型的 GeoJSON 数据。
+数据可以在 [Data V](http://datav.aliyun.com/portal/school/atlas/area_selector) 获取。  
+[GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946#autoid-1) 是一种用于编码各种地理数据的格式，使用 JavaScript 对象表示（JSON）的结构。  
 
-  * 高德 http://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}
+如 (图二)  
+![(图二)]
 
-  * http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}
 
-  * http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}  
-
-### 创建 Marker  
+### 创建 Marker
 
 一般情况都会在地图上创建多个 Marker，我这里为了统一管理， 放到了一个 LayerGroup 里面。
 
@@ -486,6 +495,10 @@ mapInstance.addLayer(markerLayer);
 
 其中 geometryCollectionGeoJson 变量是一个 GeometryCollection 类型的 GeoJSON 数据。
 
+如 (图三) 和（图四）
+![(图三)]
+![(图四)]
+
 ### 点击 Marker 打开对话框展示详情
 
 ```javascript
@@ -493,3 +506,11 @@ mapInstance.bindPopup( content: String|HTMLElement|Function|Popup , {
   minWidth: 400
 });
 ```
+如 (图五)
+![(图五)]
+
+[(图一)]: 1.jpg
+[(图二)]: 2.jpg
+[(图三)]: 3.jpg
+[(图四)]: 4.PNG
+[(图五)]: 5.jpg
