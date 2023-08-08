@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jinzhang-96.github.io","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.16.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":true,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="leaflet.js 是用于创建地图的开源 JavaScript 库。官方描述：  Leaflet is the leading open-source JavaScript library for mobile-friendly interactive maps. Weighing just about 42 KB of JS, it has all the mapping features m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leaflet.js Guide">
+<meta property="og:url" content="https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/index.html">
+<meta property="og:site_name" content="Bay Blog">
+<meta property="og:description" content="leaflet.js 是用于创建地图的开源 JavaScript 库。官方描述：  Leaflet is the leading open-source JavaScript library for mobile-friendly interactive maps. Weighing just about 42 KB of JS, it has all the mapping features m">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-06T19:20:52.227Z">
+<meta property="article:modified_time" content="2023-08-08T06:33:38.641Z">
+<meta property="article:author" content="Bay">
+<meta property="article:tag" content="Map">
+<meta property="article:tag" content="Leatlet">
+<meta property="article:tag" content="Javascript">
+<meta name="twitter:card" content="&lt;twitter:card&gt;">
+<meta name="twitter:image" content="https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/%3Ctwitter:image%3E">
+<meta name="twitter:creator" content="@&lt;twitter:creator&gt;">
+<meta name="twitter:site" content="<twitter:site>">
+<link rel="publisher" href="%3Cg+:profile_link%3E">
+<meta property="fb:admins" content="&lt;fb:admin_id&gt;">
+<meta property="fb:app_id" content="&lt;fb:app_id&gt;">
+
+
+<link rel="canonical" href="https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/","path":"2023/08/07/map/leaflet/","title":"Leaflet.js Guide"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Leaflet.js Guide | Bay Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Bay Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Quick notes</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">9</span></a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%B7%E6%AD%A5"><span class="nav-number">2.</span> <span class="nav-text">起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6"><span class="nav-number">3.</span> <span class="nav-text">进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%9C%B0%E5%9B%BE%E4%B8%8A%E7%94%BB%E5%9C%B0%E5%8C%BA%E8%BE%B9%E7%95%8C"><span class="nav-number">3.1.</span> <span class="nav-text">在地图上画地区边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Marker"><span class="nav-number">3.2.</span> <span class="nav-text">创建 Marker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%87%BB-Marker-%E6%89%93%E5%BC%80%E5%AF%B9%E8%AF%9D%E6%A1%86%E5%B1%95%E7%A4%BA%E8%AF%A6%E6%83%85"><span class="nav-number">3.3.</span> <span class="nav-text">点击 Marker 打开对话框展示详情</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Bay</p>
+  <div class="site-description" itemprop="description">简单记录个人工作和生活</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/JinZhang-96" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;JinZhang-96" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Bay">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bay Blog">
+      <meta itemprop="description" content="简单记录个人工作和生活">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Leaflet.js Guide | Bay Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leaflet.js Guide
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-07 03:20:52" itemprop="dateCreated datePublished" datetime="2023-08-07T03:20:52+08:00">2023-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-08 14:33:38" itemprop="dateModified" datetime="2023-08-08T14:33:38+08:00">2023-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/Map/" itemprop="url" rel="index"><span itemprop="name">Map</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><a target="_blank" rel="noopener" href="https://leafletjs.com/index.html">leaflet.js</a> 是用于创建地图的开源 JavaScript 库。<br>官方描述：</p>
+<blockquote>
+<p>Leaflet is the leading open-source JavaScript library for mobile-friendly interactive maps. Weighing just about 42 KB of JS, it has all the mapping features most developers ever need.</p>
+</blockquote>
+<blockquote>
+<p>Leaflet is designed with simplicity, performance and usability in mind. It works efficiently across all major desktop and mobile platforms, can be extended with lots of plugins, has a beautiful, easy to use and well-documented API and a simple, readable source code that is a joy to contribute to.</p>
+</blockquote>
+<p>中文：</p>
+<blockquote>
+<p>Leaflet 是一个领先的开源 JavaScript 库，用于创建移动友好的交互式地图。它只有大约 42 KB 的 JavaScript 文件大小，却提供了大多数开发者所需的所有地图功能。</p>
+</blockquote>
+<blockquote>
+<p>Leaflet 的设计理念是简单性、性能和易用性。它在各种主要的桌面和移动平台上高效运行。</p>
+</blockquote>
+<blockquote>
+<p>Leaflet 的另一个优点是可扩展性。它提供了许多插件，可以轻松集成到地图中，增强其功能并添加额外的特性。<br>Leaflet 还以其良好的文档化 API 而自豪，这使得开发者更容易理解和利用其功能。Leaflet 的源代码也以其简洁和可读性而闻名，这鼓励开发者做出贡献。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>国内主要有百度地图、高德地图、天地图等地图开发库，Leaflet.js 与其相比主要特点是轻量级和较高的扩展性。</p>
+<p>在设计概念上，Leaflet.js 和其他地图库是相似的，都具有 图层、矢量图形、点标记等核心部件。<br>不同的是，Leaflet.js 是一个纯前端的库， 没有提供服务接口，如果有相关需求需要对接高德地图等其他三方库的接口，这也是它轻量级的原因之一。</p>
+<h2 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h2><p>首先使用 leaflet.js 创建一个简单的例子，了解一下这个库</p>
+<ol>
+<li>安装 leaflet 依赖</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save-dev leaflet</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建 index.html 文件</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>测试<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;map&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>创建 index.js 文件</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  map,</span><br><span class="line">  tileLayer,</span><br><span class="line">  featureGroup,</span><br><span class="line">  geoJSON,</span><br><span class="line">  marker,</span><br><span class="line">  divIcon,</span><br><span class="line">  <span class="title class_">Point</span>,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;leaflet&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">initMap</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">map</span>(<span class="string">&quot;map&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">zoom</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">zoomDelta</span>: <span class="number">0.5</span>,</span><br><span class="line">    <span class="attr">attributionControl</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">zoomControl</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">maxBoundsViscosity</span>: <span class="number">0.5</span>,</span><br><span class="line">    <span class="attr">maxBounds</span>: [</span><br><span class="line">      [-<span class="number">80</span>, <span class="number">160</span>],</span><br><span class="line">      [<span class="number">80</span>, -<span class="number">160</span>],</span><br><span class="line">    ],</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapInstance = <span class="title function_">initMap</span>();</span><br></pre></td></tr></table></figure>
+
+<p>至此，地图就创建完了，但是这时地图没有配置图层，所以界面是白的。<br>添加下面代码，使其展示地图图层</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; tileLayer &#125; <span class="keyword">from</span> <span class="string">&quot;leaflet&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> tileLayer = <span class="title function_">tileLayer</span>(</span><br><span class="line">  <span class="string">&quot;http://webst04.is.autonavi.com/appmaptile?style=6&amp;x=&#123;x&#125;&amp;y=&#123;y&#125;&amp;z=&#123;z&#125;&quot;</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">maxZoom</span>: <span class="number">18</span>,</span><br><span class="line">    <span class="attr">minZoom</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">zIndex</span>: <span class="number">1</span>,</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line">mapInstance.<span class="title function_">addLayer</span>(tileLayer);</span><br></pre></td></tr></table></figure>
+
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><p>只是简单了解 Leaflet.js，远不能实现项目中复杂的需求，我们还要多了解一下它的 API 和实现原理。</p>
+<p>总而言之，地图类的库，最核心的就是 layer，即图层。<br>图层这个概念使用范围很广，图像类的技术都有图层的概念，如图片就是多个图层纵向合并起来的画面；浏览器展示的页面，实际也是多个图层经过栅格化后呈现的画面。</p>
+<p>在 Leaflet.js 中一切皆图层， Marker 是图层，矢量图形是图层，等等。</p>
+<p>首先看一下 Leaflet.js 的核心类图：</p>
+<pre class="mermaid">classDiagram
+
+class Class
+
+class Events{
+  on(type: String, fn: Function, context?: Object): this
+  off(type: String, fn?: Function, context?: Object): this
+  fire(type: String, data?: Object, propagate?: Boolean):this
+  listens(type: String):Boolean
+  once(type: String, fn: Function, context?: Object): this
+  addEventParent(obj: Evented): this
+  removeEventParent(obj: Evented): this
+}
+
+class Layer{
+  Object options
+
+  addTo(map: Map|LayerGroup): this
+  remove()
+  removeFrom(map: Map)
+  getPane(name? : String): HTMLElement
+  addInteractiveTarget(HTMLElement): this
+  removeInteractiveTarget(HTMLElement): this
+  getAttribution(): String
+
+  bindPopup(content: String|HTMLElement|Function|Popup, options?: Popup options): this
+  unbindPopup(): this
+  openPopup(latlng?: LatLng): this
+  closePopup(): this
+  togglePopup(): this
+  isPopupOpen(): boolean
+  setPopupContent(content: String|HTMLElement|Popup): this
+  getPopup(): Popup
+
+  bindTooltip(content: String|HTMLElement|Function|Tooltip, options?: Tooltip options): this
+  unbindTooltip(): this
+  openTooltip(latlng?: LatLng): this
+  closeTooltip(): this
+  toggleTooltip(): this
+  isTooltipOpen(): boolean
+  setTooltipContent(content: String|HTMLElement|Tooltip): this
+  getTooltip(): Tooltip
+}
+
+class DivOverlay{
+  Object options
+
+  onAdd(map: Map)
+  onRemove(map: Map)
+  getLatLng(): LatLng
+  setLatLng(latlng: LatLng): this
+  getContent(): String|HTMLElement
+  setContent(htmlContent: String|HTMLElement|Function): this
+  getElement(): String|HTMLElement
+  update()
+  getEvents(): Object
+  isOpen(): Boolean
+  bringToFront(): this
+  bringToBack(): this
+}
+
+class ImageOverlay
+class VideoOverlay
+
+
+class GridLayer{
+  Object options
+  onAdd()
+  beforeAdd(map: Map)
+  onRemove(map: Map)
+  bringToFront(): this
+  bringToBack(): this
+  getContainer(): HTMLElement
+  setOpacity(opacity: Number): this
+  setZIndex(zIndex: Number): this
+  isLoading(): Boolean
+  redraw(): this
+  getEvents(): Object
+  createTile(): HTMLDivElement
+  getTileSize(): Point
+}
+
+class TileLayer{
+  Object options
+  setUrl(url: String, noRedraw?: Boolean): this
+  createTile(coords: Object, done?: Function): HTMLElement
+  getTileUrl(coords: Object): String
+}
+
+class TileLayerWMS{
+  Object defaultWmsParams
+  onAdd(map: Map)
+  getTileUrl(coords: Object): String
+  setParams(params: Object, noRedraw?: Boolean): this
+}
+
+class Popup{
+  Object options
+  openOn(map: Map): this
+  onAdd(map: Map)
+  onRemove(map: Map)
+  getEvents(): Object
+}
+
+class Tooltip{
+  Object options
+  onAdd(map: Map)
+  onRemove(map: Map)
+  getEvents(): Object
+}
+
+class LayerGroup{
+  _Object _layers
+  addLayer(layer: Layer): this
+  removeLayer(layer: Layer): this
+  hasLayer(layer: Layer): Boolean
+  clearLayers(): this
+  invoke(methodName: String, …): this
+  onAdd(map: Map)
+  onRemove(map: Map)
+  eachLayer(fn: Function, context?: Object): this
+  getLayer(id: Number): Layer
+  getLayers(): Layer[]
+  setZIndex(zIndex: Number): this
+  getLayerId(layer: Layer): Number
+}
+
+class FeatureGroup{
+  addLayer(layer: Layer): this
+  removeLayer(layer: Layer): this
+  setStyle(style: Path options): this
+  bringToFront(): this
+  bringToBack(): this
+  getBounds(): LatLngBounds
+  coordsToLatLng(coords: Array): LatLng
+  coordsToLatLngs(coords: Array, levelsDeep?: Number, coordsToLatLng?: Function): Array
+  latLngToCoords(latlng: LatLng, precision?: Number): Array
+}
+
+class GeoJSON{
+  addData( data: GeoJSON ): this
+  resetStyle( layer: Path ): this
+  setStyle( style: Function ): this
+}
+
+class Marker{
+  onAdd(map: Map)
+  onRemove(map: Map)
+  getEvents(): Object
+  getLatLng(): LatLng
+  setLatLng(latlng: LatLng): this
+  getElement(): String|HTMLElement
+  update()
+  setZIndexOffset(offset: Number): this
+  setIcon(icon: Icon): this
+  setOpacity(opacity: Number): this
+
+  toGeoJSON(precision: number)
+}
+
+class Icon{
+  Object options
+  createIcon(oldIcon?: HTMLElement): HTMLElement
+  createShadow(oldIcon?: HTMLElement): HTMLElement
+}
+
+class DivIcon{
+  createIcon(oldIcon?: HTMLElement): HTMLElement
+  createShadow()
+}
+
+
+class Path{
+  Object options
+  onAdd()
+  beforeAdd(map: Map)
+  onRemove(map: Map)
+  redraw(): this
+  setStyle(style: Path options): this
+  bringToFront(): this
+  bringToBack(): this
+  getElement(): HTMLElement
+}
+
+class Renderer
+class SVG
+class Canvas
+class Polyline
+class Polygon
+class Rectangle
+class CircleMarker
+class Circle
+
+class Map{
+  setView(center: LatLng, zoom: Number, options?: Zoom/pan options): this
+
+  addLayer(layer: Layer): this
+  removeLayer(layer: Layer): this
+  hasLayer(layer: Layer): Boolean
+  eachLayer(fn: Function, context?: Object): this
+
+  openPopup(latlng?: LatLng): this
+  closePopup(): this
+
+  openTooltip(tooltip: Tooltip): this
+  closeTooltip(tooltip?: Tooltip): this
+}
+
+
+
+Events <|-- Layer
+Events <|-- Map
+Layer <|-- DivOverlay
+Layer <|-- ImageOverlay
+Layer <|-- GridLayer
+Layer <|-- LayerGroup
+Layer <|-- Marker
+Layer <|-- Path
+Layer <|-- Renderer
+
+DivOverlay <|-- Popup
+DivOverlay <|-- Tooltip
+ImageOverlay <|-- VideoOverlay
+GridLayer <|-- TileLayer
+TileLayer <|-- TileLayerWMS
+LayerGroup <|-- FeatureGroup
+FeatureGroup <|-- GeoJSON
+
+Class <|-- Icon
+Icon <|-- DivIcon
+
+Path <|-- CircleMarker
+CircleMarker <|-- Circle
+Path <|-- Polyline
+Polyline <|-- Polygon
+Polygon <|-- Rectangle
+Renderer <|-- Canvas
+Renderer <|-- SVG</pre>
+
+<p>使用 leaflet.js 编程，基本上是对上面的几个类进行操作，下面实现几个常用的需求：</p>
+<h3 id="在地图上画地区边界"><a href="#在地图上画地区边界" class="headerlink" title="在地图上画地区边界"></a>在地图上画地区边界</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; geoJSON &#125; <span class="keyword">from</span> <span class="string">&quot;leaflet&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> polygonLayer = <span class="title function_">geoJSON</span>(polygonGeojson, &#123;</span><br><span class="line">  <span class="attr">fill</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">zIndex</span>: <span class="number">2</span>,</span><br><span class="line">&#125;);</span><br><span class="line">mapInstance.<span class="title function_">addLayer</span>(polygonLayer);</span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string">其中 polygonGeojson 变量是一个 Polygon 或者 MultiPolygon 类型的 GeoJSON 数据。</span></span><br><span class="line"><span class="string">数据可以在 [Data V](http://datav.aliyun.com/portal/school/atlas/area_selector) 获取。  </span></span><br><span class="line"><span class="string">[GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946#autoid-1) 是一种用于编码各种地理数据的格式，使用 JavaScript 对象表示（JSON）的结构。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### 设置地图瓦片</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>javascript</span><br><span class="line"><span class="keyword">import</span> &#123; tileLayer &#125; <span class="keyword">from</span> <span class="string">&quot;leaflet&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> tiltUrl =</span><br><span class="line">  <span class="string">&quot;http://webst04.is.autonavi.com/appmaptile?style=6&amp;x=&#123;x&#125;&amp;y=&#123;y&#125;&amp;z=&#123;z&#125;&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> tileLayer = <span class="title function_">tileLayer</span>(tiltUrl, &#123;</span><br><span class="line">  <span class="attr">maxZoom</span>: <span class="number">18</span>,</span><br><span class="line">  <span class="attr">minZoom</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">zIndex</span>: <span class="number">1</span>,</span><br><span class="line">&#125;);</span><br><span class="line">mapInstance.<span class="title function_">addLayer</span>(tileLayer);</span><br></pre></td></tr></table></figure>
+
+<p>tiltUrl 是地图瓦片的网络地址，所以这块是很灵活的，可以随意的切换想用的地图。<br>以下是几种地图瓦片的网络地址： </p>
+<ul>
+<li><p>高德 <a target="_blank" rel="noopener" href="http://webst04.is.autonavi.com/appmaptile?style=6&x=%7Bx%7D&y=%7By%7D&z=%7Bz%7D">http://webst04.is.autonavi.com/appmaptile?style=6&amp;x={x}&amp;y={y}&amp;z={z}</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/%7Bz%7D/%7By%7D/%7Bx%7D">http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/%7Bz%7D/%7By%7D/%7Bx%7D">http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}</a></p>
+</li>
+</ul>
+<h3 id="创建-Marker"><a href="#创建-Marker" class="headerlink" title="创建 Marker"></a>创建 Marker</h3><p>一般情况都会在地图上创建多个 Marker，我这里为了统一管理， 放到了一个 LayerGroup 里面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  map,</span><br><span class="line">  tileLayer,</span><br><span class="line">  featureGroup,</span><br><span class="line">  geoJSON,</span><br><span class="line">  marker,</span><br><span class="line">  divIcon,</span><br><span class="line">  <span class="title class_">Point</span>,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;leaflet&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> markerLayer = <span class="title function_">featureGroup</span>([], &#123;</span><br><span class="line">  <span class="attr">zIndex</span>: <span class="number">3</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> pointLayer;</span><br><span class="line"><span class="keyword">let</span> currentZoom;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> createMarker = <span class="keyword">function</span> <span class="title function_">createMarker</span>(<span class="params">geoJsonPoint, latlng</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> zoom = (mapInstance = <span class="title function_">getZoom</span>());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> properties = geoJsonPoint.<span class="property">geometry</span>.<span class="property">properties</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> icon = <span class="title function_">divIcon</span>(&#123;</span><br><span class="line">    <span class="attr">html</span>: <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;div class=&quot;point&quot; style=&quot;background: <span class="subst">$&#123;</span></span></span><br><span class="line"><span class="subst"><span class="string">          properties?.level?.color</span></span></span><br><span class="line"><span class="subst"><span class="string">        &#125;</span>;display: <span class="subst">$&#123;zoom &lt; <span class="number">8</span> ? <span class="string">&quot;block&quot;</span> : <span class="string">&quot;none&quot;</span>&#125;</span>;&quot;&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;div class=&quot;pointVal&quot; style=&quot;background:  <span class="subst">$&#123;</span></span></span><br><span class="line"><span class="subst"><span class="string">          properties?.level?.color</span></span></span><br><span class="line"><span class="subst"><span class="string">        &#125;</span>; display:<span class="subst">$&#123;zoom &gt;= <span class="number">8</span> ? <span class="string">&quot;block&quot;</span> : <span class="string">&quot;none&quot;</span>&#125;</span>;&quot;&gt;</span></span><br><span class="line"><span class="string">          <span class="subst">$&#123;properties[<span class="variable language_">this</span>.activeFactor.property]&#125;</span></span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">        `</span>,</span><br><span class="line">    <span class="attr">className</span>: <span class="string">&quot;leaflet-div-icon&quot;</span>,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> m = <span class="title function_">marker</span>([latlng.<span class="property">lng</span>, latlng.<span class="property">lat</span>], &#123;</span><br><span class="line">    <span class="attr">icon</span>: icon,</span><br><span class="line">    <span class="attr">riseOnHover</span>: <span class="literal">true</span>,</span><br><span class="line">    geoJsonPoint,</span><br><span class="line">  &#125;).<span class="title function_">bindTooltip</span>(properties?.<span class="property">cityName</span>, &#123;</span><br><span class="line">    <span class="comment">// 给 marker 绑定一个 tooltip，鼠标放上去的时候展示一些提示文字</span></span><br><span class="line">    <span class="attr">className</span>: <span class="string">&quot;leaflet-tooltip&quot;</span>,</span><br><span class="line">    <span class="attr">sticky</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">offset</span>: <span class="keyword">new</span> <span class="title class_">Point</span>(<span class="number">18</span>, -<span class="number">8</span>),</span><br><span class="line">    <span class="attr">direction</span>: <span class="string">&quot;top&quot;</span>,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  markerLayer.<span class="title function_">addLayer</span>(m);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handleZoomend = <span class="keyword">function</span> (<span class="params">&#123; sourceTarget &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> zoom = sourceTarget.<span class="title function_">getZoom</span>();</span><br><span class="line">  <span class="keyword">const</span> isChange =</span><br><span class="line">    (<span class="number">8</span> &lt;= zoom &amp;&amp; currentZoom &lt;= <span class="number">7</span>) || (<span class="number">8</span> &lt;= currentZoom &amp;&amp; zoom &lt;= <span class="number">7</span>);</span><br><span class="line">  currentZoom = zoom;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 当地图 zoom 改变到界限值时， 重新创建 Marker，一般用于点的聚合和分裂</span></span><br><span class="line">  <span class="keyword">if</span> (isChange) &#123;</span><br><span class="line">    pointLayer = <span class="title function_">batchCreatePoint</span>(geometryCollectionGeoJson);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> batchCreatePoint = <span class="keyword">function</span> (<span class="params">geometryCollectionGeoJson</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (markerLayer &amp;&amp; mapInstance.<span class="title function_">hasLayer</span>(markerLayer)) &#123;</span><br><span class="line">    markerLayer.<span class="title function_">eachLayer</span>(<span class="function">(<span class="params">layer</span>) =&gt;</span> layer.<span class="title function_">off</span>()).<span class="title function_">clearLayers</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">geoJSON</span>(geometryCollectionGeoJson, &#123;</span><br><span class="line">    <span class="attr">pointToLayer</span>: createMarker,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">mapInstance.<span class="title function_">on</span>(<span class="string">&quot;zoomend&quot;</span>, <span class="variable language_">this</span>.<span class="property">handleZoomend</span>);</span><br><span class="line"></span><br><span class="line">pointLayer = <span class="title function_">batchCreatePoint</span>(geometryCollectionGeoJson);</span><br><span class="line">mapInstance.<span class="title function_">addLayer</span>(pointLayer);</span><br><span class="line">mapInstance.<span class="title function_">addLayer</span>(markerLayer);</span><br></pre></td></tr></table></figure>
+
+<p>其中 geometryCollectionGeoJson 变量是一个 GeometryCollection 类型的 GeoJSON 数据。</p>
+<h3 id="点击-Marker-打开对话框展示详情"><a href="#点击-Marker-打开对话框展示详情" class="headerlink" title="点击 Marker 打开对话框展示详情"></a>点击 Marker 打开对话框展示详情</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mapInstance.<span class="title function_">bindPopup</span>( <span class="attr">content</span>: <span class="title class_">String</span>|<span class="title class_">HTMLElement</span>|<span class="title class_">Function</span>|<span class="title class_">Popup</span> , &#123;</span><br><span class="line">  <span class="attr">minWidth</span>: <span class="number">400</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/blog/images/alipay.jpg" alt="Bay 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Bay
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/" title="Leaflet.js Guide">https://jinzhang-96.github.io/blog/2023/08/07/map/leaflet/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/blog/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/blog/tags/Map/" rel="tag"><i class="fa fa-tag"></i> Map</a>
+              <a href="/blog/tags/Leatlet/" rel="tag"><i class="fa fa-tag"></i> Leatlet</a>
+              <a href="/blog/tags/Javascript/" rel="tag"><i class="fa fa-tag"></i> Javascript</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2023/08/07/npm/publish/" rel="prev" title="发布 npm 包">
+                  <i class="fa fa-chevron-left"></i> 发布 npm 包
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bay</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/schemes/muse.js"></script><script src="/blog/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/blog/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/blog/js/third-party/fancybox.js"></script>
+
+
+  <script src="/blog/js/third-party/addtoany.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"JinZhang-96","repo":"blog","client_id":"fbcb004a3955eb0c2bdc","client_secret":"8796d0ded177adb3a8b7b6cbcb1b19d01808482b","admin_user":["JinZhang-96"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"c09e4ceb3f6894877fa7b83ad3d5442a"}</script>
+<script src="/blog/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
