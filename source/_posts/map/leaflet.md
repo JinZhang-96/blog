@@ -388,7 +388,7 @@ tiltUrl 是地图瓦片的网络地址，所以这块是很灵活的，可以随
 如 (图一)  
 ![(图一)]
 
-### 在地图上画地区边界  
+### 在地图上画地区边界
 
 ```javascript
 import { geoJSON } from "leaflet";
@@ -398,16 +398,14 @@ const polygonLayer = geoJSON(polygonGeojson, {
   zIndex: 2,
 });
 mapInstance.addLayer(polygonLayer);
-
 ```
 
 其中 polygonGeojson 变量是一个 Polygon 或者 MultiPolygon 类型的 GeoJSON 数据。
 数据可以在 [Data V](http://datav.aliyun.com/portal/school/atlas/area_selector) 获取。  
-[GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946#autoid-1) 是一种用于编码各种地理数据的格式，使用 JavaScript 对象表示（JSON）的结构。  
+[GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946#autoid-1) 是一种用于编码各种地理数据的格式，使用 JavaScript 对象表示（JSON）的结构。
 
 如 (图二)  
 ![(图二)]
-
 
 ### 创建 Marker
 
@@ -495,9 +493,8 @@ mapInstance.addLayer(markerLayer);
 
 其中 geometryCollectionGeoJson 变量是一个 GeometryCollection 类型的 GeoJSON 数据。
 
-如 (图三) 和（图四）
+如 (图三)
 ![(图三)]
-![(图四)]
 
 ### 点击 Marker 打开对话框展示详情
 
@@ -506,11 +503,76 @@ mapInstance.bindPopup( content: String|HTMLElement|Function|Popup , {
   minWidth: 400
 });
 ```
+
+如 (图四)
+![(图四)]
+
+### 创建粒子风场
+
+需要借助 [leaflet-velocity](https://github.com/onaci/leaflet-velocity) 插件实现
+
+执行：
+`npm i leaflet-velocity`
+
+```javascript
+import "leaflet-velocity";
+
+const windyLayer = L.velocityLayer({
+  displayValues: false,
+  data: windData,
+  maxVelocity: 15,
+  colorScale: ["rgb(255,255,255)"],
+});
+
+mapInstance.addLayer(windyLayer);
+```
+
+windData 是一个 JSON 对象，代表风向数据，详情描述查看
+
+> https://www.cnblogs.com/s313139232/p/15146568.html
+
+```less
+@import "~leaflet-velocity/dist/leaflet-velocity.css";
+```
+
 如 (图五)
 ![(图五)]
 
+### 创建温度、湿度等标量图
+
+需要借助 [leaflet-vector-scalar](https://gitee.com/gitsource_zdb/leaflet-vector-scalar-js) 插件实现
+
+提取其中的 `https://gitee.com/gitsource_zdb/leaflet-vector-scalar-js/blob/master/public/js/leaflet-vector-scalar.js` 文件,放到自己项目里面。
+
+```bash
+$ npm i jquery
+$ npm i backbone
+```
+
+```javascript
+import "jquery";
+import "backbone";
+import "/public/js/leaflet-scalar.js";
+
+const temperatureLayer = L.scalarLayer({
+  displayValues: false,
+  data: temperatureData,
+  maxValue: 105000,
+  minValue: 99000,
+  // colorScale: [],
+});
+
+mapInstance.addLayer(temperatureLayer);
+```
+
+temperatureData 是一个 JSON 对象，代表温度数据。
+
+如 (图六)
+![(图六)]
+
 [(图一)]: 1.jpg
 [(图二)]: 2.jpg
-[(图三)]: 3.jpg
-[(图四)]: 4.PNG
-[(图五)]: 5.jpg
+[(图三)]: 3.gif
+[(图四)]: 4.jpg
+[(图五)]: 5.gif
+[(图六)]: 6.gif
