@@ -121,16 +121,29 @@ mapInstance.addLayer(tileLayer);
 ```mermaid
 classDiagram
 
-class Class
+class Class 
+Class: + extend(Object props) Function$
+Class: + include(Object properties) Class$
+Class: + mergeOptions(Object options) Class$
+Class: + addInitHook(Function fn) Class$
+Class: + addInitHook(Function fn) Class$
 
-class Events{
-  on(type: String, fn: Function, context?: Object): this
-  off(type: String, fn?: Function, context?: Object): this
-  fire(type: String, data?: Object, propagate?: Boolean):this
-  listens(type: String):Boolean
-  once(type: String, fn: Function, context?: Object): this
-  addEventParent(obj: Evented): this
-  removeEventParent(obj: Evented): this
+class Handler
+Handler: + initialize(Map map)
+Handler: + enable() Handler
+Handler: + disable() Handler
+Handler: + enabled() Boolean
+Handler: + addTo(Map map, String name) Handler$
+
+
+class Evented{
+  + on(type: String, fn: Function, context?: Object): this
+  + off(type: String, fn?: Function, context?: Object): this
+  + fire(type: String, data?: Object, propagate?: Boolean):this
+  + listens(type: String):Boolean
+  + once(type: String, fn: Function, context?: Object): this
+  + addEventParent(obj: Evented): this
+  + removeEventParent(obj: Evented): this
 }
 
 class Layer{
@@ -328,9 +341,12 @@ class Map{
 }
 
 
+Class <|-- Icon
+Class <|-- Evented
+Class <|-- Handler
 
-Events <|-- Layer
-Events <|-- Map
+Evented <|-- Layer
+Evented <|-- Map
 Layer <|-- DivOverlay
 Layer <|-- ImageOverlay
 Layer <|-- GridLayer
@@ -347,7 +363,7 @@ TileLayer <|-- TileLayerWMS
 LayerGroup <|-- FeatureGroup
 FeatureGroup <|-- GeoJSON
 
-Class <|-- Icon
+
 Icon <|-- DivIcon
 
 Path <|-- CircleMarker
