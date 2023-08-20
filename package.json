@@ -2,6 +2,9 @@
   "name": "hexo-site",
   "version": "0.0.0",
   "private": true,
+  "repository": {
+    "url": "https://github.com/JinZhang-96/blog.git"
+  },
   "scripts": {
     "post": "hexo new post",
     "draft": "hexo new draft",
