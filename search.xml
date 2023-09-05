@@ -29,122 +29,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker Install</title>
-    <url>/blog/2023/07/23/centos/docker-install/</url>
-    <content><![CDATA[<p><a href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
-<span id="more"></span>
-
-<h2 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h2><p>在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：</p>
-<ol>
-<li><p>可以正常访问网络</p>
-</li>
-<li><p>分区文件系统类型，支持 Docker 的存储驱动类型。</p>
-</li>
-<li><p>操作系统内核版本满足 Docker 的要求。</p>
-</li>
-</ol>
-<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>因为需要使用 yum 安装 docker ，所以要保证网络正常。<br>首先，执行 <code>ping www.baidu.com</code>，检查能否连接网络。<br>如果 ping 命令不能通过，则需要检查 firewalld 是否已关闭，网卡是否配置正确。</p>
-<h4 id="配置防火墙"><a href="#配置防火墙" class="headerlink" title="配置防火墙"></a>配置防火墙</h4><p>查看防火墙是否关闭，若开启中，则关闭 firewalld ，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ systemctl status firewalld            ( 查看防火墙状态 )</span><br><span class="line">$ sudo systemctl stop firewalld         ( 关闭防火墙 )</span><br><span class="line">$ sudo systemctl <span class="built_in">disable</span>  firewalld     ( 禁用防火墙。重启操作系统后，防火墙不会自动启动)</span><br></pre></td></tr></table></figure>
-<h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>查看网卡信息，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line"></span><br><span class="line">------------------------输出如下--------------------------  </span><br><span class="line"></span><br><span class="line">eno16777736: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.128.3  netmask 255.255.255.0  broadcast 192.168.128.255</span><br><span class="line">        inet6 fe80::20c:29ff:fe90:7a54  prefixlen 64  scopeid 0x20&lt;<span class="built_in">link</span>&gt;</span><br><span class="line">        ether 00:0c:29:90:7a:54  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 98076  bytes 117924104 (112.4 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 20565  bytes 1481553 (1.4 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
-<p>可以看到当前主机有 2 张网卡，其中名字为 lo 这张网卡为本地环回网卡，它的 IP 地址是 127.0.0.1（localhost），实现系统内部发送和接收数据，<br>无需配置；名字的前缀为 eno 的网卡实现与外部网络交换数据， 需要重新配置。  </p>
-<p>配置网卡，执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim /etc/sysconfig/network-script/ifcfg-[name]     <span class="comment"># name 为网卡的名字</span></span><br><span class="line"></span><br><span class="line">TYPE=Ethernet</span><br><span class="line">BOOTPROTO=static        <span class="comment"># static 使用静态 IP; dhcp 通过 dhcp 服务动态分配IP</span></span><br><span class="line">DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=<span class="built_in">yes</span></span><br><span class="line">IPV6_AUTOCONF=<span class="built_in">yes</span></span><br><span class="line">IPV6_DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">NAME=eno16777736</span><br><span class="line">UUID=2bd860aa-dcf9-4e5f-9297-63bfd3b5943c</span><br><span class="line">DEVICE=eno16777736</span><br><span class="line">ONBOOT=<span class="built_in">yes</span>              <span class="comment"># 指定是否在开机时启用该网卡</span></span><br><span class="line">IPADDR=192.168.128.3    <span class="comment"># 配置正确的网卡IP         BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">NETMASK=255.255.255.0   <span class="comment"># 配置正确的子网掩码       BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">GATEWAY=192.168.128.2   <span class="comment"># 配置正确的网关           BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">DNS1=192.168.128.2      <span class="comment"># 配置正确的DNS服务器， 如果错误会导致 IP 可以访问， 域名无法访问的问题</span></span><br><span class="line"></span><br><span class="line">:wq                     <span class="comment"># 保存并退出</span></span><br></pre></td></tr></table></figure>
-<p>其中IPADDR 、NETMASK 、GATEWAY 、DNS1 这 4 项不是固定的，要根据实际的网络环境配置。<br>当前主机的虚拟网络编辑器如（图一）所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/network.jpg" alt="(图一)"></p>
-<p>重启网卡，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl restart network （启动中）</span><br><span class="line">$ sudo systemctl start network   （已关闭）</span><br></pre></td></tr></table></figure>
-
-<h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>下表是 Docker 存储驱动类型和 CentOS 文件系统类型的对应关系：</p>
-<table>
-<thead>
-<tr>
-<th align="center">Storage driver</th>
-<th align="center">Supported backing filesystems</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">overlay2</td>
-<td align="center">xfs with ftype&#x3D;1, ext4</td>
-</tr>
-<tr>
-<td align="center">fuse-overlayfs</td>
-<td align="center">any filesystem</td>
-</tr>
-<tr>
-<td align="center">devicemapper</td>
-<td align="center">direct-lvm</td>
-</tr>
-<tr>
-<td align="center">btrfs</td>
-<td align="center">btrfs</td>
-</tr>
-<tr>
-<td align="center">zfs</td>
-<td align="center">zfs</td>
-</tr>
-<tr>
-<td align="center">vfs</td>
-<td align="center">any filesystem</td>
-</tr>
-</tbody></table>
-<p>如果没有在 <code>/etc/docker/daemon.json</code> 指定 storage-driver，  Docker 安装过程中发现 CentOS 文件系统类型不支持存储驱动类型时，会自动降级为支持的存储驱动类型。其中 vfs 存储驱动类型可以在任何文件系统类型中兼容， 保证了 Docker 在安装中能正确初始化存储驱动类型。</p>
-<ol>
-<li><p>查看各个分区文件类型。执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ lsblk -f</span><br></pre></td></tr></table></figure></li>
-<li><p>选择要分区的磁盘<br><strong>在分区格式化之前， 请确保重要数据进行备份，因为重新格式化文件系统将删除所有数据。</strong><br>例如，如果要分区的磁盘是&#x2F;dev&#x2F;sda，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo fdisk /dev/sda</span><br></pre></td></tr></table></figure>
-<p>在fdisk命令提示符下，可以使用以下命令进行分区：<br>n：创建一个新分区。<br>d：删除一个分区。<br>p：显示分区表。<br>w：保存并退出。<br>使用n命令创建一个新分区。根据提示输入分区的起始扇区和大小。<br>使用p命令查看分区表，确保分区已成功创建。<br>使用w命令保存并退出fdisk。</p>
-</li>
-<li><p>分区格式化，执行命令：<br>如果要分区的磁盘是&#x2F;dev&#x2F;sda</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mkfs.xfs -n ftype=1 /dev/sda</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>挂载重新格式化的文件系统。运行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mount -o ftype=1 /dev/sda /var/lib/docker</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p>本机安装的 Docker 为 24.0.4 ，要求内核版本为 3.10 或更高版本。<br>如果内核版本过低， Docker 安装之后， 容器暴露的接口，将会无法访问。</p>
-<ol>
-<li>查看当前系统的内核版本，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
-<li>更新系统软件包列表，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum update</span><br></pre></td></tr></table></figure></li>
-<li>安装 ELRepo 存储库，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm</span><br></pre></td></tr></table></figure></li>
-<li>安装最新的稳定内核版本，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum --enablerepo=elrepo-kernel install kernel-ml</span><br></pre></td></tr></table></figure></li>
-<li>更新 GRUB 配置以使用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg</span><br></pre></td></tr></table></figure></li>
-<li>重启系统以应用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo reboot</span><br></pre></td></tr></table></figure></li>
-<li>重启后，确认内核版本是否已成功升级，执行命令：。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="清理-Docker"><a href="#清理-Docker" class="headerlink" title="清理 Docker"></a>清理 Docker</h3><p>移除之前安装的 Docker，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
-
-<h3 id="添加-Docker-仓库"><a href="#添加-Docker-仓库" class="headerlink" title="添加 Docker 仓库"></a>添加 Docker 仓库</h3><p>添加 Docker 阿里云镜像仓库，执行命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils</span><br><span class="line">$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
-<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><p>安装 docker 依赖，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
-<h3 id="修改-Docker-仓库"><a href="#修改-Docker-仓库" class="headerlink" title="修改 Docker 仓库"></a>修改 Docker 仓库</h3><p> 编辑 <code>/etc/docker/daemon.json</code> 文件。执行命令：<br> <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> $ vim /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line">向文件中添加下面的配置：</span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line">   <span class="string">&quot;https://hub-mirror.c.163.com&quot;</span>,</span><br><span class="line">   <span class="string">&quot;https://mirror.baidubce.com&quot;</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
-<h3 id="启动-Docker"><a href="#启动-Docker" class="headerlink" title="启动 Docker"></a>启动 Docker</h3><p>启动 Docker，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
-
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
-<li><p>拉取 Nginx 镜像，执行命令： </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker pull nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行 Nginx ，并暴露 80 接口，执行命令：  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker run nginx -d -p 80:80</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>检查是否启动成功<br>浏览器访问 <code>http://192.168.128.3</code>， 如(图二)所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/nginx.jpg" alt="(图二)"></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>CentOS</category>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Docker</tag>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo Guide</title>
     <url>/blog/2023/07/23/hexo-guide/</url>
     <content><![CDATA[<p><a href="https://hexo.io/">Hexo</a> 是一个快速搭建博客网站的框架。<br>以下是官网的描述：</p>
@@ -712,36 +596,119 @@
       </tags>
   </entry>
   <entry>
-    <title>发布 npm 包</title>
-    <url>/blog/2023/08/07/npm/publish/</url>
-    <content><![CDATA[<p>平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。<br>为什么不发布到 <a href="https://docs.npmjs.com/">npm</a> 仓库呢？<br>发布到仓库后，我们在其他项目中使用时只需要使用 <code>npm i xxx</code> 命令安装就可以了。  </p>
-<p>发布一个包通常包含以下几步操作，没有任何难度：  </p>
+    <title>Docker Install</title>
+    <url>/blog/2023/07/23/centos/docker-install/</url>
+    <content><![CDATA[<p><a href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
 <span id="more"></span>
 
-<h2 id="注册-npm-账号"><a href="#注册-npm-账号" class="headerlink" title="注册 npm 账号"></a>注册 npm 账号</h2><p>要往 npm 发布包，首先要有一个 npm 账号，可以在 <code>https://www.npmjs.com/signup</code> 进行注册。</p>
-<h2 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h2><p>在项目中使用 <code>npm login</code> 命令登录注册的账号。<br>登录完成后，使用 <code>npm whoami</code> 命令查看当前登录的账号，确认是否登录成功。</p>
-<h2 id="配置项目"><a href="#配置项目" class="headerlink" title="配置项目"></a>配置项目</h2><p>发布包之前，请确保项目已经符合发布的标准，别人安装后能正常使用。  </p>
-<p>一般需要正确配置以下：  </p>
+<h2 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h2><p>在安装 Docker 之前，需要先检查一下操作系统是否具备以下条件：</p>
 <ol>
-<li><p><code>package.json</code> 文件中 <code>dependencies</code> 配置正确的依赖。  </p>
+<li><p>可以正常访问网络</p>
 </li>
-<li><p><code>package.json</code> 文件中 <code>main</code> 配置正确的入口文件，这样在项目中才能正确导入模块。</p>
+<li><p>分区文件系统类型，支持 Docker 的存储驱动类型。</p>
 </li>
-<li><p>构建项目</p>
-</li>
-<li><p>npm 的 registry 必须是 <code>https://registry.npmjs.org/</code>，如果配置了代理镜像，请改过来。</p>
-</li>
-<li><p>确保包名唯一。包名就是  <code>package.json</code> 文件中 <code>name</code> 的值，可使用 <code> npm view &lt;name&gt;</code> 命令查看此包名是否存在。</p>
+<li><p>操作系统内核版本满足 Docker 的要求。</p>
 </li>
 </ol>
-<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><p>使用 <code>npm publish</code> 发布本地包到 npm registry，发布成功后。可以在 <code>https://www.npmjs.com/</code> 网站登录自己的账号，进入 packages 页面查看是否发布成功，如（图一）所示:<br><img data-src="/blog/2023/08/07/npm/publish/package.jpg" alt="(图一)"></p>
+<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>因为需要使用 yum 安装 docker ，所以要保证网络正常。<br>首先，执行 <code>ping www.baidu.com</code>，检查能否连接网络。<br>如果 ping 命令不能通过，则需要检查 firewalld 是否已关闭，网卡是否配置正确。</p>
+<h4 id="配置防火墙"><a href="#配置防火墙" class="headerlink" title="配置防火墙"></a>配置防火墙</h4><p>查看防火墙是否关闭，若开启中，则关闭 firewalld ，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ systemctl status firewalld            ( 查看防火墙状态 )</span><br><span class="line">$ sudo systemctl stop firewalld         ( 关闭防火墙 )</span><br><span class="line">$ sudo systemctl <span class="built_in">disable</span>  firewalld     ( 禁用防火墙。重启操作系统后，防火墙不会自动启动)</span><br></pre></td></tr></table></figure>
+<h4 id="配置网卡"><a href="#配置网卡" class="headerlink" title="配置网卡"></a>配置网卡</h4><p>查看网卡信息，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line"></span><br><span class="line">------------------------输出如下--------------------------  </span><br><span class="line"></span><br><span class="line">eno16777736: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.128.3  netmask 255.255.255.0  broadcast 192.168.128.255</span><br><span class="line">        inet6 fe80::20c:29ff:fe90:7a54  prefixlen 64  scopeid 0x20&lt;<span class="built_in">link</span>&gt;</span><br><span class="line">        ether 00:0c:29:90:7a:54  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 98076  bytes 117924104 (112.4 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 20565  bytes 1481553 (1.4 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 206  bytes 18234 (17.8 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+<p>可以看到当前主机有 2 张网卡，其中名字为 lo 这张网卡为本地环回网卡，它的 IP 地址是 127.0.0.1（localhost），实现系统内部发送和接收数据，<br>无需配置；名字的前缀为 eno 的网卡实现与外部网络交换数据， 需要重新配置。  </p>
+<p>配置网卡，执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim /etc/sysconfig/network-script/ifcfg-[name]     <span class="comment"># name 为网卡的名字</span></span><br><span class="line"></span><br><span class="line">TYPE=Ethernet</span><br><span class="line">BOOTPROTO=static        <span class="comment"># static 使用静态 IP; dhcp 通过 dhcp 服务动态分配IP</span></span><br><span class="line">DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=<span class="built_in">yes</span></span><br><span class="line">IPV6_AUTOCONF=<span class="built_in">yes</span></span><br><span class="line">IPV6_DEFROUTE=<span class="built_in">yes</span></span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">NAME=eno16777736</span><br><span class="line">UUID=2bd860aa-dcf9-4e5f-9297-63bfd3b5943c</span><br><span class="line">DEVICE=eno16777736</span><br><span class="line">ONBOOT=<span class="built_in">yes</span>              <span class="comment"># 指定是否在开机时启用该网卡</span></span><br><span class="line">IPADDR=192.168.128.3    <span class="comment"># 配置正确的网卡IP         BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">NETMASK=255.255.255.0   <span class="comment"># 配置正确的子网掩码       BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">GATEWAY=192.168.128.2   <span class="comment"># 配置正确的网关           BOOTPROTO=dhcp 时 无需配置</span></span><br><span class="line">DNS1=192.168.128.2      <span class="comment"># 配置正确的DNS服务器， 如果错误会导致 IP 可以访问， 域名无法访问的问题</span></span><br><span class="line"></span><br><span class="line">:wq                     <span class="comment"># 保存并退出</span></span><br></pre></td></tr></table></figure>
+<p>其中IPADDR 、NETMASK 、GATEWAY 、DNS1 这 4 项不是固定的，要根据实际的网络环境配置。<br>当前主机的虚拟网络编辑器如（图一）所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/network.jpg" alt="(图一)"></p>
+<p>重启网卡，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl restart network （启动中）</span><br><span class="line">$ sudo systemctl start network   （已关闭）</span><br></pre></td></tr></table></figure>
+
+<h3 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h3><p>下表是 Docker 存储驱动类型和 CentOS 文件系统类型的对应关系：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Storage driver</th>
+<th align="center">Supported backing filesystems</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">overlay2</td>
+<td align="center">xfs with ftype&#x3D;1, ext4</td>
+</tr>
+<tr>
+<td align="center">fuse-overlayfs</td>
+<td align="center">any filesystem</td>
+</tr>
+<tr>
+<td align="center">devicemapper</td>
+<td align="center">direct-lvm</td>
+</tr>
+<tr>
+<td align="center">btrfs</td>
+<td align="center">btrfs</td>
+</tr>
+<tr>
+<td align="center">zfs</td>
+<td align="center">zfs</td>
+</tr>
+<tr>
+<td align="center">vfs</td>
+<td align="center">any filesystem</td>
+</tr>
+</tbody></table>
+<p>如果没有在 <code>/etc/docker/daemon.json</code> 指定 storage-driver，  Docker 安装过程中发现 CentOS 文件系统类型不支持存储驱动类型时，会自动降级为支持的存储驱动类型。其中 vfs 存储驱动类型可以在任何文件系统类型中兼容， 保证了 Docker 在安装中能正确初始化存储驱动类型。</p>
+<ol>
+<li><p>查看各个分区文件类型。执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ lsblk -f</span><br></pre></td></tr></table></figure></li>
+<li><p>选择要分区的磁盘<br><strong>在分区格式化之前， 请确保重要数据进行备份，因为重新格式化文件系统将删除所有数据。</strong><br>例如，如果要分区的磁盘是&#x2F;dev&#x2F;sda，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo fdisk /dev/sda</span><br></pre></td></tr></table></figure>
+<p>在fdisk命令提示符下，可以使用以下命令进行分区：<br>n：创建一个新分区。<br>d：删除一个分区。<br>p：显示分区表。<br>w：保存并退出。<br>使用n命令创建一个新分区。根据提示输入分区的起始扇区和大小。<br>使用p命令查看分区表，确保分区已成功创建。<br>使用w命令保存并退出fdisk。</p>
+</li>
+<li><p>分区格式化，执行命令：<br>如果要分区的磁盘是&#x2F;dev&#x2F;sda</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mkfs.xfs -n ftype=1 /dev/sda</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂载重新格式化的文件系统。运行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo mount -o ftype=1 /dev/sda /var/lib/docker</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p>本机安装的 Docker 为 24.0.4 ，要求内核版本为 3.10 或更高版本。<br>如果内核版本过低， Docker 安装之后， 容器暴露的接口，将会无法访问。</p>
+<ol>
+<li>查看当前系统的内核版本，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
+<li>更新系统软件包列表，执行命令：  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum update</span><br></pre></td></tr></table></figure></li>
+<li>安装 ELRepo 存储库，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm</span><br></pre></td></tr></table></figure></li>
+<li>安装最新的稳定内核版本，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum --enablerepo=elrepo-kernel install kernel-ml</span><br></pre></td></tr></table></figure></li>
+<li>更新 GRUB 配置以使用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg</span><br></pre></td></tr></table></figure></li>
+<li>重启系统以应用新内核，执行命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo reboot</span><br></pre></td></tr></table></figure></li>
+<li>重启后，确认内核版本是否已成功升级，执行命令：。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">uname</span> -r</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="清理-Docker"><a href="#清理-Docker" class="headerlink" title="清理 Docker"></a>清理 Docker</h3><p>移除之前安装的 Docker，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-Docker-仓库"><a href="#添加-Docker-仓库" class="headerlink" title="添加 Docker 仓库"></a>添加 Docker 仓库</h3><p>添加 Docker 阿里云镜像仓库，执行命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils</span><br><span class="line">$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><p>安装 docker 依赖，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+<h3 id="修改-Docker-仓库"><a href="#修改-Docker-仓库" class="headerlink" title="修改 Docker 仓库"></a>修改 Docker 仓库</h3><p> 编辑 <code>/etc/docker/daemon.json</code> 文件。执行命令：<br> <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> $ vim /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line">向文件中添加下面的配置：</span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line">   <span class="string">&quot;https://hub-mirror.c.163.com&quot;</span>,</span><br><span class="line">   <span class="string">&quot;https://mirror.baidubce.com&quot;</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动-Docker"><a href="#启动-Docker" class="headerlink" title="启动 Docker"></a>启动 Docker</h3><p>启动 Docker，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li><p>拉取 Nginx 镜像，执行命令： </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker pull nginx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行 Nginx ，并暴露 80 接口，执行命令：  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker run nginx -d -p 80:80</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查是否启动成功<br>浏览器访问 <code>http://192.168.128.3</code>， 如(图二)所示：<br><img data-src="/blog/2023/07/23/centos/docker-install/nginx.jpg" alt="(图二)"></p>
+</li>
+</ol>
 ]]></content>
       <categories>
-        <category>npm</category>
+        <category>CentOS</category>
+        <category>Docker</category>
       </categories>
       <tags>
-        <tag>npm</tag>
-        <tag>publish</tag>
+        <tag>CentOS</tag>
+        <tag>Docker</tag>
+        <tag>Install</tag>
       </tags>
   </entry>
   <entry>
@@ -1128,6 +1095,157 @@ Renderer <|-- SVG</pre>
         <tag>Algorithm</tag>
         <tag>Sort</tag>
         <tag>Radix Sort</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ThreadLocal 浅析</title>
+    <url>/blog/2023/09/05/java/threadLocal/</url>
+    <content><![CDATA[<p><code>ThreadLocal</code> 是位于 <code>java.lang</code> 包下的类，主要的作用是存储线程的私有数据。<br>这些数据最终会存放到 <code>java.lang.Thread</code> 类的 <code>threadLocals</code> 变量内。  </p>
+<span id="more"></span>
+
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>学习 <code>java.lang.ThreadLocal</code> 类，要用到访问修饰符相关知识，先回顾一下 Java 中的每种访问修饰符可访问的范围。</p>
+<table>
+<thead>
+<tr>
+<th align="center">-</th>
+<th align="center">同一个类</th>
+<th align="center">同一个包</th>
+<th>不同包子类</th>
+<th>不同包</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">public</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td align="center">protected</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">default</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">private</td>
+<td align="center">√</td>
+<td align="center"></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p><code>ThreadLocal</code> 可用的 API 比较简单，共有 4 个方法：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">方法名</th>
+<th align="center">类型</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>withInitial</strong></td>
+<td align="center">静态方法</td>
+<td>设置 ThreadLocal 的初始数据</td>
+<td><code>ThreadLocal&lt;String&gt; threadLocal = ThreadLocal.withInitial(() -&gt; &quot;初始数据&quot;);</code></td>
+</tr>
+<tr>
+<td align="center"><strong>get</strong></td>
+<td align="center">类方法</td>
+<td>获取数据</td>
+<td><code>threadLocal.get()</code></td>
+</tr>
+<tr>
+<td align="center"><strong>set</strong></td>
+<td align="center">类方法</td>
+<td>设置数据</td>
+<td><code>threadLocal.set(&quot;设置数据&quot;)</code></td>
+</tr>
+<tr>
+<td align="center"><strong>remove</strong></td>
+<td align="center">类方法</td>
+<td>删除数据</td>
+<td><code>threadLocal.remove()</code></td>
+</tr>
+</tbody></table>
+<h2 id="基本示例"><a href="#基本示例" class="headerlink" title="基本示例"></a>基本示例</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;(); <span class="comment">// 创建一个 ThreadLocal 示例，该类是一个泛型类，其泛型的类型就是存储的值的类型</span></span><br><span class="line">System.out.println(threadLocal.get());</span><br><span class="line"><span class="comment">// output: null</span></span><br><span class="line">threadLocal.set(<span class="string">&quot;设置数据&quot;</span>);</span><br><span class="line">System.out.println(threadLocal.get());</span><br><span class="line"><span class="comment">// output: 设置数据</span></span><br><span class="line">threadLocal.remove();</span><br><span class="line">System.out.println(threadLocal.get());</span><br><span class="line"><span class="comment">// output: null</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p>具体调用过程如下：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">createMap</span><span class="params">(Thread t, T firstValue)</span> &#123;</span><br><span class="line">        t.threadLocals = <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(<span class="built_in">this</span>, firstValue);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="comment">// 调用 getMap 方法， 拿到 ThreadLocalMap</span></span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="comment">// 如果 ThreadLocalMap 为空，则调用 createMap 方法创建 ThreadLocalMap 实例； 否则，以 this (即当前 ThreadLocal 示例)位 key, 设置 value。</span></span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>)</span><br><span class="line">            map.set(<span class="built_in">this</span>, value);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            createMap(t, value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal set()</code>，是先通过<code>ThreadLocal getMap()</code> 方法获取当前线程的 <code>threadLocals</code> 变量。<br>如果 <code>threadLocals</code> 为空，则通过 <code>ThreadLocal createMap()</code> 方法为 <code>threadLocals</code> 赋值；否则， 以当前 <code>ThreadLocal</code> 的实例为 key, 调用 <code>ThreadLocalMap set(key, value)</code> 方法设置数据。</p>
+<h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p>具体调用过程如下：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> T <span class="title function_">initialValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T <span class="title function_">setInitialValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">T</span> <span class="variable">value</span> <span class="operator">=</span> initialValue();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>)</span><br><span class="line">            map.set(<span class="built_in">this</span>, value);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            createMap(t, value);</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">            ThreadLocalMap.<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> map.getEntry(<span class="built_in">this</span>);</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                <span class="type">T</span> <span class="variable">result</span> <span class="operator">=</span> (T)e.value;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> setInitialValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal get()</code>，是先获取当前线程的 <code>threadLocals</code> 变量。  </p>
+<p>如果 <code>threadLocals</code> 为空，则调用 <code>setInitialValue()</code> 方法，其方法会通过 <code>initialValue()</code> 方法获取初始数据，然后通过 <code>ThreadLocal createMap()</code> 方法为 <code>threadLocals</code> 赋值，并返回初始值。  </p>
+<p>否则， 以当前 <code>ThreadLocal</code> 的实例为 key, 调用 <code>ThreadLocalMap  map.getEntry(this)</code> 方法获取一个 <code>ThreadLocalMap.Entry</code> 实例， 然后返回<code>ThreadLocalMap.Entry</code> 的 <code>value</code> 属性。</p>
+<h2 id="remove"><a href="#remove" class="headerlink" title="remove"></a>remove</h2><p>具体调用过程如下：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">()</span> &#123;</span><br><span class="line">         <span class="type">ThreadLocalMap</span> <span class="variable">m</span> <span class="operator">=</span> getMap(Thread.currentThread());</span><br><span class="line">         <span class="keyword">if</span> (m != <span class="literal">null</span>)</span><br><span class="line">             m.remove(<span class="built_in">this</span>);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal remove()</code>，是先获取当前线程的 <code>threadLocals</code> 变量。  </p>
+<p>当 <code>threadLocals</code> 非空时，则以当前 <code>ThreadLocal</code> 的实例为 key，调用 <code>threadLocals</code> 的 <code>remove(this)</code> 方法，删掉当前线程的私有数据。</p>
+<h2 id="withInitial"><a href="#withInitial" class="headerlink" title="withInitial"></a>withInitial</h2><p>具体调用过程如下：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">SuppliedThreadLocal</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Supplier&lt;? <span class="keyword">extends</span> <span class="title class_">T</span>&gt; supplier;</span><br><span class="line"></span><br><span class="line">        SuppliedThreadLocal(Supplier&lt;? <span class="keyword">extends</span> <span class="title class_">T</span>&gt; supplier) &#123;</span><br><span class="line">            <span class="built_in">this</span>.supplier = Objects.requireNonNull(supplier);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">protected</span> T <span class="title function_">initialValue</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> supplier.get();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; ThreadLocal&lt;S&gt; <span class="title function_">withInitial</span><span class="params">(Supplier&lt;? extends S&gt; supplier)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SuppliedThreadLocal</span>&lt;&gt;(supplier);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal withInitial</code>，是创建一个 <code>ThreadLocal</code> 的子类 <code>SuppliedThreadLocal</code> 实例，并返回。这个子类里面重写了 <code>ThreadLocal initialValue()</code> 方法。 这样就可以通过设置 <code>Supplier</code> 类型的变量 <code>supplier</code> 设置初始数据的值了。</p>
+<h2 id="ThreadLocalMap"><a href="#ThreadLocalMap" class="headerlink" title="ThreadLocalMap"></a>ThreadLocalMap</h2><p>通过分析 <code>ThreadLocal</code> 的源码， 可知数据的设置、获取、删除，都是 <code>ThreadLocalMap</code> 内部静态类处理的。<br>以下是  <code>ThreadLocalMap</code> 的源码：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalMap</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span> <span class="keyword">extends</span> <span class="title class_">WeakReference</span>&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line">        <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">        Object value;</span><br><span class="line"></span><br><span class="line">        Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">            <span class="built_in">super</span>(k);</span><br><span class="line">            value = v;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The initial capacity -- MUST be a power of two.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">INITIAL_CAPACITY</span> <span class="operator">=</span> <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The table, resized as necessary.</span></span><br><span class="line"><span class="comment">     * table.length MUST always be a power of two.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Entry[] table;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The number of entries in the table.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The next size value at which to resize.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> threshold; <span class="comment">// Default to 0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Set the resize threshold to maintain at worst a 2/3 load factor.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setThreshold</span><span class="params">(<span class="type">int</span> len)</span> &#123;</span><br><span class="line">        threshold = len * <span class="number">2</span> / <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Increment i modulo len.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">nextIndex</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> len)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ((i + <span class="number">1</span> &lt; len) ? i + <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Decrement i modulo len.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">prevIndex</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> len)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ((i - <span class="number">1</span> &gt;= <span class="number">0</span>) ? i - <span class="number">1</span> : len - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ThreadLocalMap(ThreadLocal&lt;?&gt; firstKey, Object firstValue) &#123;</span><br><span class="line">        table = <span class="keyword">new</span> <span class="title class_">Entry</span>[INITIAL_CAPACITY];</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> firstKey.threadLocalHashCode &amp; (INITIAL_CAPACITY - <span class="number">1</span>);</span><br><span class="line">        table[i] = <span class="keyword">new</span> <span class="title class_">Entry</span>(firstKey, firstValue);</span><br><span class="line">        size = <span class="number">1</span>;</span><br><span class="line">        setThreshold(INITIAL_CAPACITY);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">ThreadLocalMap</span><span class="params">(ThreadLocalMap parentMap)</span> &#123;</span><br><span class="line">        Entry[] parentTable = parentMap.table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> parentTable.length;</span><br><span class="line">        setThreshold(len);</span><br><span class="line">        table = <span class="keyword">new</span> <span class="title class_">Entry</span>[len];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> parentTable[j];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                ThreadLocal&lt;Object&gt; key = (ThreadLocal&lt;Object&gt;) e.get();</span><br><span class="line">                <span class="keyword">if</span> (key != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="type">Object</span> <span class="variable">value</span> <span class="operator">=</span> key.childValue(e.value);</span><br><span class="line">                    <span class="type">Entry</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line">                    <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">while</span> (table[h] != <span class="literal">null</span>)</span><br><span class="line">                        h = nextIndex(h, len);</span><br><span class="line">                    table[h] = c;</span><br><span class="line">                    size++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Entry <span class="title function_">getEntry</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (table.length - <span class="number">1</span>);</span><br><span class="line">        <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> table[i];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == key)</span><br><span class="line">            <span class="keyword">return</span> e;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> getEntryAfterMiss(key, i, e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Entry <span class="title function_">getEntryAfterMiss</span><span class="params">(ThreadLocal&lt;?&gt; key, <span class="type">int</span> i, Entry e)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">            <span class="keyword">if</span> (k == key)</span><br><span class="line">                <span class="keyword">return</span> e;</span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span>)</span><br><span class="line">                expungeStaleEntry(i);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                i = nextIndex(i, len);</span><br><span class="line">            e = tab[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(ThreadLocal&lt;?&gt; key, Object value)</span> &#123;</span><br><span class="line"></span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">             e != <span class="literal">null</span>;</span><br><span class="line">             e = tab[i = nextIndex(i, len)]) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (k == key) &#123;</span><br><span class="line">                e.value = value;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">                replaceStaleEntry(key, value, i);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        tab[i] = <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line">        <span class="type">int</span> <span class="variable">sz</span> <span class="operator">=</span> ++size;</span><br><span class="line">        <span class="keyword">if</span> (!cleanSomeSlots(i, sz) &amp;&amp; sz &gt;= threshold)</span><br><span class="line">            rehash();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Remove the entry for key.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">             e != <span class="literal">null</span>;</span><br><span class="line">             e = tab[i = nextIndex(i, len)]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (e.get() == key) &#123;</span><br><span class="line">                e.clear();</span><br><span class="line">                expungeStaleEntry(i);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">replaceStaleEntry</span><span class="params">(ThreadLocal&lt;?&gt; key, Object value,</span></span><br><span class="line"><span class="params">                                   <span class="type">int</span> staleSlot)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        Entry e;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Back up to check for prior stale entry in current run.</span></span><br><span class="line">        <span class="comment">// We clean out whole runs at a time to avoid continual</span></span><br><span class="line">        <span class="comment">// incremental rehashing due to garbage collector freeing</span></span><br><span class="line">        <span class="comment">// up refs in bunches (i.e., whenever the collector runs).</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">slotToExpunge</span> <span class="operator">=</span> staleSlot;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> prevIndex(staleSlot, len);</span><br><span class="line">             (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">             i = prevIndex(i, len))</span><br><span class="line">            <span class="keyword">if</span> (e.get() == <span class="literal">null</span>)</span><br><span class="line">                slotToExpunge = i;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Find either the key or trailing null slot of run, whichever</span></span><br><span class="line">        <span class="comment">// occurs first</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> nextIndex(staleSlot, len);</span><br><span class="line">             (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">             i = nextIndex(i, len)) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If we find key, then we need to swap it</span></span><br><span class="line">            <span class="comment">// with the stale entry to maintain hash table order.</span></span><br><span class="line">            <span class="comment">// The newly stale slot, or any other stale slot</span></span><br><span class="line">            <span class="comment">// encountered above it, can then be sent to expungeStaleEntry</span></span><br><span class="line">            <span class="comment">// to remove or rehash all of the other entries in run.</span></span><br><span class="line">            <span class="keyword">if</span> (k == key) &#123;</span><br><span class="line">                e.value = value;</span><br><span class="line"></span><br><span class="line">                tab[i] = tab[staleSlot];</span><br><span class="line">                tab[staleSlot] = e;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Start expunge at preceding stale entry if it exists</span></span><br><span class="line">                <span class="keyword">if</span> (slotToExpunge == staleSlot)</span><br><span class="line">                    slotToExpunge = i;</span><br><span class="line">                cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If we didn&#x27;t find stale entry on backward scan, the</span></span><br><span class="line">            <span class="comment">// first stale entry seen while scanning for key is the</span></span><br><span class="line">            <span class="comment">// first still present in the run.</span></span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span> &amp;&amp; slotToExpunge == staleSlot)</span><br><span class="line">                slotToExpunge = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If key not found, put new entry in stale slot</span></span><br><span class="line">        tab[staleSlot].value = <span class="literal">null</span>;</span><br><span class="line">        tab[staleSlot] = <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If there are any other stale entries in run, expunge them</span></span><br><span class="line">        <span class="keyword">if</span> (slotToExpunge != staleSlot)</span><br><span class="line">            cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">expungeStaleEntry</span><span class="params">(<span class="type">int</span> staleSlot)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// expunge entry at staleSlot</span></span><br><span class="line">        tab[staleSlot].value = <span class="literal">null</span>;</span><br><span class="line">        tab[staleSlot] = <span class="literal">null</span>;</span><br><span class="line">        size--;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Rehash until we encounter null</span></span><br><span class="line">        Entry e;</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line">        <span class="keyword">for</span> (i = nextIndex(staleSlot, len);</span><br><span class="line">             (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">             i = nextIndex(i, len)) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">                e.value = <span class="literal">null</span>;</span><br><span class="line">                tab[i] = <span class="literal">null</span>;</span><br><span class="line">                size--;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> k.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (h != i) &#123;</span><br><span class="line">                    tab[i] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// Unlike Knuth 6.4 Algorithm R, we must scan until</span></span><br><span class="line">                    <span class="comment">// null because multiple entries could have been stale.</span></span><br><span class="line">                    <span class="keyword">while</span> (tab[h] != <span class="literal">null</span>)</span><br><span class="line">                        h = nextIndex(h, len);</span><br><span class="line">                    tab[h] = e;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">cleanSomeSlots</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">removed</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            i = nextIndex(i, len);</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == <span class="literal">null</span>) &#123;</span><br><span class="line">                n = len;</span><br><span class="line">                removed = <span class="literal">true</span>;</span><br><span class="line">                i = expungeStaleEntry(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">while</span> ( (n &gt;&gt;&gt;= <span class="number">1</span>) != <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> removed;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">rehash</span><span class="params">()</span> &#123;</span><br><span class="line">        expungeStaleEntries();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Use lower threshold for doubling to avoid hysteresis</span></span><br><span class="line">        <span class="keyword">if</span> (size &gt;= threshold - threshold / <span class="number">4</span>)</span><br><span class="line">            resize();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Double the capacity of the table.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">resize</span><span class="params">()</span> &#123;</span><br><span class="line">        Entry[] oldTab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">oldLen</span> <span class="operator">=</span> oldTab.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">newLen</span> <span class="operator">=</span> oldLen * <span class="number">2</span>;</span><br><span class="line">        Entry[] newTab = <span class="keyword">new</span> <span class="title class_">Entry</span>[newLen];</span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; oldLen; ++j) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> oldTab[j];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">                <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">                    e.value = <span class="literal">null</span>; <span class="comment">// Help the GC</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> k.threadLocalHashCode &amp; (newLen - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">while</span> (newTab[h] != <span class="literal">null</span>)</span><br><span class="line">                        h = nextIndex(h, newLen);</span><br><span class="line">                    newTab[h] = e;</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        setThreshold(newLen);</span><br><span class="line">        size = count;</span><br><span class="line">        table = newTab;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Expunge all stale entries in the table.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">expungeStaleEntries</span><span class="params">()</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[j];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == <span class="literal">null</span>)</span><br><span class="line">                expungeStaleEntry(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过分析内部静态类 <code>ThreadLocalMap</code>, 可以知道其内部维护了一个 <code>Entry</code> 类型的数组，数组的标号就是通过以下代码得到的：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"><span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>其中 tab 就是 <code>ThreadLocalMap</code> 内部维护的数组， key为 <code>ThreadLocal</code> 的实例。</p>
+<p><code>Entry</code> 类继承了 <code>WeakReference</code> 类，这导致 <code>Entry</code> 类持有的 <code>ThreadLocal</code> 实例是一个弱引用， 垃圾回收的时候，这里的引用不能阻止 <code>ThreadLocal</code> 实例被回收。 一旦 key 被回收后，这个 Entry 实例就再也不能被找到， value 就永远的留在了 Entry 的实例中。 这将有内存泄漏的风险。<br>所以在使用 <code>ThreadLocal</code> 的时候， 如果 ThreadLocal 的实例不用了，需要 调用 remove() 把数据清除掉， 防止内存泄漏。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>既然 <code>ThreadLocal</code> 实际是操作的 <code>Thread threadLocals</code> 变量， 为什么不使用 public 修饰变量， 而用 default 修饰变量呢？<br><code>public</code> 修饰变量， 则可以 随意的设置 key；而 <code>default</code> 修饰变量, 只能同一包的类访问这个变量。<br>这就和 <code>TreadLocal</code> 绑定在一起了， key 值只能采用 <code>ThreadLocal threadLocalHashCode</code>。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>ThreadLocal</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>ThreadLocal</tag>
+        <tag>Source</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>发布 npm 包</title>
+    <url>/blog/2023/08/07/npm/publish/</url>
+    <content><![CDATA[<p>平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。<br>为什么不发布到 <a href="https://docs.npmjs.com/">npm</a> 仓库呢？<br>发布到仓库后，我们在其他项目中使用时只需要使用 <code>npm i xxx</code> 命令安装就可以了。  </p>
+<p>发布一个包通常包含以下几步操作，没有任何难度：  </p>
+<span id="more"></span>
+
+<h2 id="注册-npm-账号"><a href="#注册-npm-账号" class="headerlink" title="注册 npm 账号"></a>注册 npm 账号</h2><p>要往 npm 发布包，首先要有一个 npm 账号，可以在 <code>https://www.npmjs.com/signup</code> 进行注册。</p>
+<h2 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h2><p>在项目中使用 <code>npm login</code> 命令登录注册的账号。<br>登录完成后，使用 <code>npm whoami</code> 命令查看当前登录的账号，确认是否登录成功。</p>
+<h2 id="配置项目"><a href="#配置项目" class="headerlink" title="配置项目"></a>配置项目</h2><p>发布包之前，请确保项目已经符合发布的标准，别人安装后能正常使用。  </p>
+<p>一般需要正确配置以下：  </p>
+<ol>
+<li><p><code>package.json</code> 文件中 <code>dependencies</code> 配置正确的依赖。  </p>
+</li>
+<li><p><code>package.json</code> 文件中 <code>main</code> 配置正确的入口文件，这样在项目中才能正确导入模块。</p>
+</li>
+<li><p>构建项目</p>
+</li>
+<li><p>npm 的 registry 必须是 <code>https://registry.npmjs.org/</code>，如果配置了代理镜像，请改过来。</p>
+</li>
+<li><p>确保包名唯一。包名就是  <code>package.json</code> 文件中 <code>name</code> 的值，可使用 <code> npm view &lt;name&gt;</code> 命令查看此包名是否存在。</p>
+</li>
+</ol>
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><p>使用 <code>npm publish</code> 发布本地包到 npm registry，发布成功后。可以在 <code>https://www.npmjs.com/</code> 网站登录自己的账号，进入 packages 页面查看是否发布成功，如（图一）所示:<br><img data-src="/blog/2023/08/07/npm/publish/package.jpg" alt="(图一)"></p>
+]]></content>
+      <categories>
+        <category>npm</category>
+      </categories>
+      <tags>
+        <tag>npm</tag>
+        <tag>publish</tag>
       </tags>
   </entry>
   <entry>
