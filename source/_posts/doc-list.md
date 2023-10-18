@@ -22,4 +22,4 @@ tags:
 
 6.  [GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946#autoid-1)
 
-
+7.  [OAuth2](https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html)
