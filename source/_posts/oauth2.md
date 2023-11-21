@@ -1,6 +1,14 @@
-# OAuth 2 使用方式
+---
+title: OAuth 2 使用方式
+categories:
+- OAuth
+tags:
+- OAuth
+---
 
 OAuth 2 具有 认证（Authentication）和授权（Authorization）的功能
+
+<!-- more -->
 
 ## 授权码模式
 
