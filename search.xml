@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Doc List</title>
-    <url>/blog/2023/07/27/doc-list/</url>
-    <content><![CDATA[<p>记录一些常用的 API 文档  </p>
-<span id="more"></span>
-
-<ol>
-<li><p><a href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
-</li>
-<li><p><a href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
-</li>
-<li><p><a href="https://zhonghui.chat/">ChatGPT</a></p>
-</li>
-<li><p><a href="https://leafletjs.com/index.html">leafletjs</a></p>
-</li>
-<li><p><a href="https://geekdaxue.co/read/leaflet-cn/v1.9.3-doc">leafletjs 中文</a></p>
-</li>
-<li><p><a href="https://datatracker.ietf.org/doc/html/rfc7946#autoid-1">GeoJSON</a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Help</category>
-      </categories>
-      <tags>
-        <tag>Doc</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo Guide</title>
     <url>/blog/2023/07/23/hexo-guide/</url>
     <content><![CDATA[<p><a href="https://hexo.io/">Hexo</a> 是一个快速搭建博客网站的框架。<br>以下是官网的描述：</p>
@@ -596,6 +568,59 @@
       </tags>
   </entry>
   <entry>
+    <title>Doc List</title>
+    <url>/blog/2023/11/21/doc-list/</url>
+    <content><![CDATA[<p>记录一些常用的 API 文档  </p>
+<span id="more"></span>
+
+<ol>
+<li><p><a href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
+</li>
+<li><p><a href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
+</li>
+<li><p><a href="https://zhonghui.chat/">ChatGPT</a></p>
+</li>
+<li><p><a href="https://leafletjs.com/index.html">leafletjs</a></p>
+</li>
+<li><p><a href="https://geekdaxue.co/read/leaflet-cn/v1.9.3-doc">leafletjs 中文</a></p>
+</li>
+<li><p><a href="https://datatracker.ietf.org/doc/html/rfc7946#autoid-1">GeoJSON</a></p>
+</li>
+<li><p><a href="https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">OAuth2</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Help</category>
+      </categories>
+      <tags>
+        <tag>Doc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OAuth 2 使用方式</title>
+    <url>/blog/2023/11/21/oauth2/</url>
+    <content><![CDATA[<p>OAuth 2 具有 认证（Authentication）和授权（Authorization）的功能</p>
+<span id="more"></span>
+
+<h2 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h2><p>A 应用 跳转到授权服务器的 <code>https://xxx/oauth/authorize?   response_type=code&amp;   client_id=CLIENT_ID&amp;   redirect_uri=CALLBACK_URL&amp;   scope=read</code>地址，然后转发到登陆页面。<br>  登录成功后，会创建一个授权码，通过 redirect_uri 参数的回调地址返回授权码。  </p>
+<p>A 应用使用授权码 在后端请求 <code>https://xxx/oauth/token?  client_id=CLIENT_ID&amp;  client_secret=CLIENT_SECRET&amp;  grant_type=authorization_code&amp;  code=AUTHORIZATION_CODE&amp;  redirect_uri=CALLBACK_URL</code> 地址，获取到 access_token 后保留在后端使用。<br> 当access_token 过期后，通过 <code>https://xxx/oauth/token?   grant_type=refresh_token&amp;   client_id=CLIENT_ID&amp;   client_secret=CLIENT_SECRET&amp;   refresh_token=REFRESH_TOKEN</code> 地址使用 refresh_token 重新获取 access_token。</p>
+<p>这种方式是最常用的流程，安全性也最高，它适用于那些有后端的 Web 应用。授权码通过前端传送，令牌则是储存在后端，而且所有与资源服务器的通信都在后端完成。这样的前后端分离，可以避免令牌泄漏。</p>
+<h2 id="隐式模式"><a href="#隐式模式" class="headerlink" title="隐式模式"></a>隐式模式</h2><p>该模式会直接获取 access_token, A 应用 跳转到授权服务器的 <code>https://xxx/oauth/authorize?   response_type=token&amp;   client_id=CLIENT_ID&amp;   redirect_uri=CALLBACK_URL&amp;   scope=read</code>地址，然后转发到登陆页面。<br>登录成功后，会创建一个 access_token，通过 redirect_uri 参数的回调地址返回 access_token。  </p>
+<p>这种方式把令牌直接传给前端，是很不安全的。因此，只能用于一些安全要求不高的场景，并且令牌的有效期必须非常短，通常就是会话期间（session）有效，浏览器关掉，令牌就失效了。</p>
+<h2 id="密码模式"><a href="#密码模式" class="headerlink" title="密码模式"></a>密码模式</h2><p>该模式直接使用密码获取 access_token, A 应用通过 Ajax 方式请求 <code>https://xxx/token?   grant_type=password&amp;   username=USERNAME&amp;   password=PASSWORD&amp;   client_id=CLIENT_ID</code> 地址，返回 access_token。  </p>
+<p>这种方式需要用户给出自己的用户名&#x2F;密码，显然风险很大，因此只适用于其他授权方式都无法采用的情况，而且必须是用户高度信任的应用。</p>
+<h2 id="凭证模式"><a href="#凭证模式" class="headerlink" title="凭证模式"></a>凭证模式</h2><p>该模式使用注册的 client_id 和 client_secret 获取 access_token。<br>A 应用发送 <code>https://xxx/token?   grant_type=client_credentials&amp;   client_id=CLIENT_ID&amp;   client_secret=CLIENT_SECRET</code> 请求， 获取 access_token。  </p>
+<p>这种方式给出的令牌，是针对第三方应用的，而不是针对用户的，即有可能多个用户共享同一个令牌。</p>
+]]></content>
+      <categories>
+        <category>OAuth</category>
+      </categories>
+      <tags>
+        <tag>OAuth</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker Install</title>
     <url>/blog/2023/07/23/centos/docker-install/</url>
     <content><![CDATA[<p><a href="https://www.docker.com/">Docker</a> 是一款开源的虚拟化容器。<br>本文记录了在 CentOS 7 操作系统中安装 Docker 的完整过程。</p>
@@ -709,6 +734,102 @@
         <tag>CentOS</tag>
         <tag>Docker</tag>
         <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Cloud Alibaba deploy for Docker</title>
+    <url>/blog/2024/01/03/centos/docker-cloud/</url>
+    <content><![CDATA[<p>在 Docker 中部署 Spring Cloud Alibaba 插件中遇到的几个问题， 在此记录一下。</p>
+<span id="more"></span>
+
+<h2 id="Nacos-容器启动成功，应用连接不到"><a href="#Nacos-容器启动成功，应用连接不到" class="headerlink" title="Nacos 容器启动成功，应用连接不到"></a>Nacos 容器启动成功，应用连接不到</h2><p>  如果 Nacos 容器已经启动成功，管理页面也能访问，但是 Spring Cloud 项目却连接不上 Nacos。<br>  请确认 Nacos 容器是否开放 9848 端口，因为应用和 Nacos 通信的端口是 9848, 而不是管理页面的 8848。</p>
+<h2 id="Nacos-服务列表中的服务-IP-为-容器内部-IP，-导致应用不能通信"><a href="#Nacos-服务列表中的服务-IP-为-容器内部-IP，-导致应用不能通信" class="headerlink" title="Nacos 服务列表中的服务 IP 为 容器内部 IP， 导致应用不能通信"></a>Nacos 服务列表中的服务 IP 为 容器内部 IP， 导致应用不能通信</h2><p>  请配置 <code>docker-compose.yml</code> 文件，添加正确的 IP。<br>  如下指定 Seata 的 IP：<br>    <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line">  <span class="attr">environment:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">SEATA_IP=192.168.128.3</span></span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CentOS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Docker</tag>
+        <tag>Nacos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Axure 8 密钥</title>
+    <url>/blog/2023/11/21/keypair/axure-8/</url>
+    <content><![CDATA[<p>Axure 8 的密钥</p>
+<span id="more"></span>
+
+<h3 id="axure8最新授权码"><a href="#axure8最新授权码" class="headerlink" title="axure8最新授权码"></a>axure8最新授权码</h3><ol>
+<li>被授权人：<code>www.jb51.net</code><br>授权密钥：<code>smn/B4H9oFf30K6sLW36LaTs11yoKk5p616FpnyGdbtTum95cKLanzezWL6EZOOA</code></li>
+</ol>
+<h3 id="Enterprise-Edition-企业版"><a href="#Enterprise-Edition-企业版" class="headerlink" title="Enterprise Edition 企业版"></a>Enterprise Edition 企业版</h3><ol>
+<li><p>被授权人：<code>www.jb51.net</code><br>授权密钥：<code>PfIjTySgSBZei/AM49Wsl/OXbAzPBegmTxQWNxGt+/VKKkbOI0VzxlKmpnpVYIIg</code></p>
+</li>
+<li><p>被授权人：<code>zdfans.com</code><br>授权密钥：<code>gP5uuK2gH+iIVO3YFZwoKyxAdHpXRGNnZWN8Obntqv7++FF3pAz7dTu8B61ySxli</code></p>
+</li>
+<li><p>被授权人：<code>www.jb51.net</code><br>授权密钥：<code>1Tjde3V1zSfNd430PD8o/hSvynvV8mjbg6bRbzN1U6B6BU1UcuEUFownErIWvA0X</code></p>
+</li>
+<li><p>被授权人：<code>zdfans.com</code><br>授权密钥：<code>gP5uuK2gH + iIVO3YFZwoKyxAdHpXRGNnZWN8Obntqv7 ++ FF3pAz7dTu8B61ySxli</code></p>
+</li>
+<li><p>被授权人： <code>zdfans</code><br>授权密钥： <code>fZw2VoYzXakllUuLVdTH13QYWnjD6NZrxgubQkaRyxD5+HNMqdr+WZKkaa6IoE5N</code></p>
+</li>
+<li><p>被授权人： <code>zd423</code><br>授权密钥： <code>LrZoHQetrL7OK8XOVWgvTFn+XOR32hQkrxkYj0CkbDUsvvENp6GCS38B8GiOS1ec</code></p>
+</li>
+<li><p>被授权人： <code>Koshy</code><br>授权密钥： <code>wTADPqxn3KChzJxLmUr5jTTitCgsfRkftQQ1yIG9HmK83MYSm7GPxLREGn+Ii6xY</code></p>
+</li>
+<li><p>被授权人： <code>University of Science and Technology of China (CLASSROOM)</code><br>授权密钥： <code>DTXRAnPn1P65Rt0xB4eTQ+4bF5IUF0gu0X9XBEUhM4QxY0DRFJxYEmgh4nyh7RtL</code></p>
+</li>
+<li><p>被授权人: <code>IloveyouAxure</code><br>授权密钥: <code>UChpuxwbDW6eAIaAf9UujEFSBwN3vpEz9snHvlCQVJGQy4p7WrCyKLLvV5QLvqva</code></p>
+</li>
+<li><p>被授权人：<code>www.jb51.net</code> (授权密钥不同)<br>授权密钥：<code>eAg7+bcWukP6VGmv0m9I/cnZPCzVRBb+JQQ627jYJfFfNV0HHeVu7VdZJRVUohXc</code></p>
+</li>
+<li><p>被授权人：<code>www.jb51.net</code><br>授权密钥：<code>5eKQiVe0zlGqMijERRp6ancI2jGAxhuejGWvk2oWClywQSB/Mrq72wYhj7D9gAKC</code></p>
+</li>
+<li><p>License：<code>www.jb51.net</code><br>授权密钥：<code>D0Srb+A6vmCrc+AClDrmRTQFpzTEXNuX7Ep1Prr9GqpKOU9JZHbA8OFwOYcZr7L4</code></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Help</category>
+      </categories>
+      <tags>
+        <tag>keypair</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Office 2019 密钥</title>
+    <url>/blog/2023/11/21/keypair/office/</url>
+    <content><![CDATA[<p>Office 2019 的密钥</p>
+<span id="more"></span>
+
+<h3 id="密钥"><a href="#密钥" class="headerlink" title="密钥"></a>密钥</h3><p>WYNJP-DVV7Q-B8JW8-KC48F-HQYCT</p>
+<p>6NR79-7HWKQ-8KCQD-DPRH8-DGQ2T</p>
+<p>N4DWX-366XK-Y4C9T-C63VB-R626G</p>
+<p>4NW2K-8P43B-9JD4F-2B233-XHMCT</p>
+<p>CXYNQ-MHCP3-VRCQ7-RMH8V-3J4W6</p>
+<p>MDW9N-YYK2B-2M2TG-Q3TP7-B7XGG</p>
+<p>NVY4K-C6HQY-RQ2Q4-JXXTV-YY7PT</p>
+<p>3FNVY-QDCP4-KQGT6-YYV7M-8FJJ6</p>
+<p>TK77M-FNVFK-MCW4W-FJ8GH-T3C6G</p>
+<p>FN3Y9-3VPQW-TDF8B-MFMBF-4YBCT</p>
+<p>R38NK-3M2FC-92XXC-VGMVM-TXY86</p>
+<p>Q34KM-YNMC7-PTF96-MR9XG-H8TTG</p>
+<p>D3HQH-2NDRB-HX2GX-4TQ3K-QV8J6</p>
+<p>NB73Y-T2GXX-TKMB4-FYXCJ-F3M9Q</p>
+<p>DG426-XVNVP-KWYGG-YVBYQ-FM7PT</p>
+<p>TN4DX-XYC8B-QY6X4-7X6PC-8XD2T</p>
+<p>3QQJG-N98P8-66WCT-W28P6-H8TTG</p>
+<p>J4447-N6TBB-78HPT-4D77C-8XD2Y</p>
+<p>DNGD7-3PK2C-8VKCJ-6Y2HG-9KY86</p>
+<p>3Q9NB-GJFJ8-RYVQY-BDGFJ-W46TG</p>
+]]></content>
+      <categories>
+        <category>Help</category>
+      </categories>
+      <tags>
+        <tag>keypair</tag>
       </tags>
   </entry>
   <entry>
@@ -1068,154 +1189,6 @@ Renderer <|-- SVG</pre>
       </tags>
   </entry>
   <entry>
-    <title>Radix Sort</title>
-    <url>/blog/2023/08/01/sort/base-sort/</url>
-    <content><![CDATA[<p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。</p>
-<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：</p>
-<blockquote>
-<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
-</blockquote>
-<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个较稳定并且高效的算法，非常适合对元素位数相近的数组排序。</p>
-<span id="more"></span>
-
-<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据最大数位数 k 的影响，如最大数位数为 10，则 k 为 10。<br>其时间复杂度公式为 <code>O(n * k)</code>。</p>
-<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的传递，一步步进行推导，来确定数据最终的顺序性。</p>
-<ol>
-<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
-<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
-<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
-</ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: TODO</span></span><br><span class="line"><span class="comment"> * @Author: zb</span></span><br><span class="line"><span class="comment"> * @Date: 2023-08-01 21:17:58</span></span><br><span class="line"><span class="comment"> * @LastEditors: zb</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2023-08-07 01:38:43</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> baseSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数组</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">baseSort</span>(data, i);</span><br><span class="line">  mapData.<span class="title function_">clear</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Algorithm</category>
-        <category>Sort</category>
-      </categories>
-      <tags>
-        <tag>Algorithm</tag>
-        <tag>Sort</tag>
-        <tag>Radix Sort</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ThreadLocal 浅析</title>
-    <url>/blog/2023/09/05/java/threadLocal/</url>
-    <content><![CDATA[<p><code>ThreadLocal</code> 是位于 <code>java.lang</code> 包下的类，主要的作用是存储线程的私有数据。<br>这些数据最终会存放到 <code>java.lang.Thread</code> 类的 <code>threadLocals</code> 变量内。  </p>
-<span id="more"></span>
-
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>学习 <code>java.lang.ThreadLocal</code> 类，要用到访问修饰符相关知识，先回顾一下 Java 中的每种访问修饰符可访问的范围。</p>
-<table>
-<thead>
-<tr>
-<th align="center">-</th>
-<th align="center">同一个类</th>
-<th align="center">同一个包</th>
-<th>不同包子类</th>
-<th>不同包</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">public</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td align="center">protected</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td>√</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">default</td>
-<td align="center">√</td>
-<td align="center">√</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="center">private</td>
-<td align="center">√</td>
-<td align="center"></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p><code>ThreadLocal</code> 可用的 API 比较简单，共有 4 个方法：  </p>
-<table>
-<thead>
-<tr>
-<th align="center">方法名</th>
-<th align="center">类型</th>
-<th>作用</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>withInitial</strong></td>
-<td align="center">静态方法</td>
-<td>设置 ThreadLocal 的初始数据</td>
-<td><code>ThreadLocal&lt;String&gt; threadLocal = ThreadLocal.withInitial(() -&gt; &quot;初始数据&quot;);</code></td>
-</tr>
-<tr>
-<td align="center"><strong>get</strong></td>
-<td align="center">类方法</td>
-<td>获取数据</td>
-<td><code>threadLocal.get()</code></td>
-</tr>
-<tr>
-<td align="center"><strong>set</strong></td>
-<td align="center">类方法</td>
-<td>设置数据</td>
-<td><code>threadLocal.set(&quot;设置数据&quot;)</code></td>
-</tr>
-<tr>
-<td align="center"><strong>remove</strong></td>
-<td align="center">类方法</td>
-<td>删除数据</td>
-<td><code>threadLocal.remove()</code></td>
-</tr>
-</tbody></table>
-<h2 id="基本示例"><a href="#基本示例" class="headerlink" title="基本示例"></a>基本示例</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;(); <span class="comment">// 创建一个 ThreadLocal 示例，该类是一个泛型类，其泛型的类型就是存储的值的类型</span></span><br><span class="line">System.out.println(threadLocal.get());</span><br><span class="line"><span class="comment">// output: null</span></span><br><span class="line">threadLocal.set(<span class="string">&quot;设置数据&quot;</span>);</span><br><span class="line">System.out.println(threadLocal.get());</span><br><span class="line"><span class="comment">// output: 设置数据</span></span><br><span class="line">threadLocal.remove();</span><br><span class="line">System.out.println(threadLocal.get());</span><br><span class="line"><span class="comment">// output: null</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p>具体调用过程如下：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">createMap</span><span class="params">(Thread t, T firstValue)</span> &#123;</span><br><span class="line">        t.threadLocals = <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(<span class="built_in">this</span>, firstValue);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="comment">// 调用 getMap 方法， 拿到 ThreadLocalMap</span></span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="comment">// 如果 ThreadLocalMap 为空，则调用 createMap 方法创建 ThreadLocalMap 实例； 否则，以 this (即当前 ThreadLocal 示例)位 key, 设置 value。</span></span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>)</span><br><span class="line">            map.set(<span class="built_in">this</span>, value);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            createMap(t, value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal set()</code>，是先通过<code>ThreadLocal getMap()</code> 方法获取当前线程的 <code>threadLocals</code> 变量。<br>如果 <code>threadLocals</code> 为空，则通过 <code>ThreadLocal createMap()</code> 方法为 <code>threadLocals</code> 赋值；否则， 以当前 <code>ThreadLocal</code> 的实例为 key, 调用 <code>ThreadLocalMap set(key, value)</code> 方法设置数据。</p>
-<h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p>具体调用过程如下：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> T <span class="title function_">initialValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T <span class="title function_">setInitialValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">T</span> <span class="variable">value</span> <span class="operator">=</span> initialValue();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>)</span><br><span class="line">            map.set(<span class="built_in">this</span>, value);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            createMap(t, value);</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">            ThreadLocalMap.<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> map.getEntry(<span class="built_in">this</span>);</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                <span class="type">T</span> <span class="variable">result</span> <span class="operator">=</span> (T)e.value;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> setInitialValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal get()</code>，是先获取当前线程的 <code>threadLocals</code> 变量。  </p>
-<p>如果 <code>threadLocals</code> 为空，则调用 <code>setInitialValue()</code> 方法，其方法会通过 <code>initialValue()</code> 方法获取初始数据，然后通过 <code>ThreadLocal createMap()</code> 方法为 <code>threadLocals</code> 赋值，并返回初始值。  </p>
-<p>否则， 以当前 <code>ThreadLocal</code> 的实例为 key, 调用 <code>ThreadLocalMap  map.getEntry(this)</code> 方法获取一个 <code>ThreadLocalMap.Entry</code> 实例， 然后返回<code>ThreadLocalMap.Entry</code> 的 <code>value</code> 属性。</p>
-<h2 id="remove"><a href="#remove" class="headerlink" title="remove"></a>remove</h2><p>具体调用过程如下：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">()</span> &#123;</span><br><span class="line">         <span class="type">ThreadLocalMap</span> <span class="variable">m</span> <span class="operator">=</span> getMap(Thread.currentThread());</span><br><span class="line">         <span class="keyword">if</span> (m != <span class="literal">null</span>)</span><br><span class="line">             m.remove(<span class="built_in">this</span>);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal remove()</code>，是先获取当前线程的 <code>threadLocals</code> 变量。  </p>
-<p>当 <code>threadLocals</code> 非空时，则以当前 <code>ThreadLocal</code> 的实例为 key，调用 <code>threadLocals</code> 的 <code>remove(this)</code> 方法，删掉当前线程的私有数据。</p>
-<h2 id="withInitial"><a href="#withInitial" class="headerlink" title="withInitial"></a>withInitial</h2><p>具体调用过程如下：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">SuppliedThreadLocal</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Supplier&lt;? <span class="keyword">extends</span> <span class="title class_">T</span>&gt; supplier;</span><br><span class="line"></span><br><span class="line">        SuppliedThreadLocal(Supplier&lt;? <span class="keyword">extends</span> <span class="title class_">T</span>&gt; supplier) &#123;</span><br><span class="line">            <span class="built_in">this</span>.supplier = Objects.requireNonNull(supplier);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">protected</span> T <span class="title function_">initialValue</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> supplier.get();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; ThreadLocal&lt;S&gt; <span class="title function_">withInitial</span><span class="params">(Supplier&lt;? extends S&gt; supplier)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SuppliedThreadLocal</span>&lt;&gt;(supplier);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>分析 <code>ThreadLocal</code> 源码，可知调用 <code>ThreadLocal withInitial</code>，是创建一个 <code>ThreadLocal</code> 的子类 <code>SuppliedThreadLocal</code> 实例，并返回。这个子类里面重写了 <code>ThreadLocal initialValue()</code> 方法。 这样就可以通过设置 <code>Supplier</code> 类型的变量 <code>supplier</code> 设置初始数据的值了。</p>
-<h2 id="ThreadLocalMap"><a href="#ThreadLocalMap" class="headerlink" title="ThreadLocalMap"></a>ThreadLocalMap</h2><p>通过分析 <code>ThreadLocal</code> 的源码， 可知数据的设置、获取、删除，都是 <code>ThreadLocalMap</code> 内部静态类处理的。<br>以下是  <code>ThreadLocalMap</code> 的源码：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalMap</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span> <span class="keyword">extends</span> <span class="title class_">WeakReference</span>&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line">        <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">        Object value;</span><br><span class="line"></span><br><span class="line">        Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">            <span class="built_in">super</span>(k);</span><br><span class="line">            value = v;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The initial capacity -- MUST be a power of two.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">INITIAL_CAPACITY</span> <span class="operator">=</span> <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The table, resized as necessary.</span></span><br><span class="line"><span class="comment">     * table.length MUST always be a power of two.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Entry[] table;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The number of entries in the table.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The next size value at which to resize.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> threshold; <span class="comment">// Default to 0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Set the resize threshold to maintain at worst a 2/3 load factor.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setThreshold</span><span class="params">(<span class="type">int</span> len)</span> &#123;</span><br><span class="line">        threshold = len * <span class="number">2</span> / <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Increment i modulo len.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">nextIndex</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> len)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ((i + <span class="number">1</span> &lt; len) ? i + <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Decrement i modulo len.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">prevIndex</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> len)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ((i - <span class="number">1</span> &gt;= <span class="number">0</span>) ? i - <span class="number">1</span> : len - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ThreadLocalMap(ThreadLocal&lt;?&gt; firstKey, Object firstValue) &#123;</span><br><span class="line">        table = <span class="keyword">new</span> <span class="title class_">Entry</span>[INITIAL_CAPACITY];</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> firstKey.threadLocalHashCode &amp; (INITIAL_CAPACITY - <span class="number">1</span>);</span><br><span class="line">        table[i] = <span class="keyword">new</span> <span class="title class_">Entry</span>(firstKey, firstValue);</span><br><span class="line">        size = <span class="number">1</span>;</span><br><span class="line">        setThreshold(INITIAL_CAPACITY);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">ThreadLocalMap</span><span class="params">(ThreadLocalMap parentMap)</span> &#123;</span><br><span class="line">        Entry[] parentTable = parentMap.table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> parentTable.length;</span><br><span class="line">        setThreshold(len);</span><br><span class="line">        table = <span class="keyword">new</span> <span class="title class_">Entry</span>[len];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> parentTable[j];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                ThreadLocal&lt;Object&gt; key = (ThreadLocal&lt;Object&gt;) e.get();</span><br><span class="line">                <span class="keyword">if</span> (key != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="type">Object</span> <span class="variable">value</span> <span class="operator">=</span> key.childValue(e.value);</span><br><span class="line">                    <span class="type">Entry</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line">                    <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">while</span> (table[h] != <span class="literal">null</span>)</span><br><span class="line">                        h = nextIndex(h, len);</span><br><span class="line">                    table[h] = c;</span><br><span class="line">                    size++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Entry <span class="title function_">getEntry</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (table.length - <span class="number">1</span>);</span><br><span class="line">        <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> table[i];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == key)</span><br><span class="line">            <span class="keyword">return</span> e;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> getEntryAfterMiss(key, i, e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Entry <span class="title function_">getEntryAfterMiss</span><span class="params">(ThreadLocal&lt;?&gt; key, <span class="type">int</span> i, Entry e)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">            <span class="keyword">if</span> (k == key)</span><br><span class="line">                <span class="keyword">return</span> e;</span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span>)</span><br><span class="line">                expungeStaleEntry(i);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                i = nextIndex(i, len);</span><br><span class="line">            e = tab[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(ThreadLocal&lt;?&gt; key, Object value)</span> &#123;</span><br><span class="line"></span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">             e != <span class="literal">null</span>;</span><br><span class="line">             e = tab[i = nextIndex(i, len)]) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (k == key) &#123;</span><br><span class="line">                e.value = value;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">                replaceStaleEntry(key, value, i);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        tab[i] = <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line">        <span class="type">int</span> <span class="variable">sz</span> <span class="operator">=</span> ++size;</span><br><span class="line">        <span class="keyword">if</span> (!cleanSomeSlots(i, sz) &amp;&amp; sz &gt;= threshold)</span><br><span class="line">            rehash();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Remove the entry for key.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">             e != <span class="literal">null</span>;</span><br><span class="line">             e = tab[i = nextIndex(i, len)]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (e.get() == key) &#123;</span><br><span class="line">                e.clear();</span><br><span class="line">                expungeStaleEntry(i);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">replaceStaleEntry</span><span class="params">(ThreadLocal&lt;?&gt; key, Object value,</span></span><br><span class="line"><span class="params">                                   <span class="type">int</span> staleSlot)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        Entry e;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Back up to check for prior stale entry in current run.</span></span><br><span class="line">        <span class="comment">// We clean out whole runs at a time to avoid continual</span></span><br><span class="line">        <span class="comment">// incremental rehashing due to garbage collector freeing</span></span><br><span class="line">        <span class="comment">// up refs in bunches (i.e., whenever the collector runs).</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">slotToExpunge</span> <span class="operator">=</span> staleSlot;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> prevIndex(staleSlot, len);</span><br><span class="line">             (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">             i = prevIndex(i, len))</span><br><span class="line">            <span class="keyword">if</span> (e.get() == <span class="literal">null</span>)</span><br><span class="line">                slotToExpunge = i;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Find either the key or trailing null slot of run, whichever</span></span><br><span class="line">        <span class="comment">// occurs first</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> nextIndex(staleSlot, len);</span><br><span class="line">             (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">             i = nextIndex(i, len)) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If we find key, then we need to swap it</span></span><br><span class="line">            <span class="comment">// with the stale entry to maintain hash table order.</span></span><br><span class="line">            <span class="comment">// The newly stale slot, or any other stale slot</span></span><br><span class="line">            <span class="comment">// encountered above it, can then be sent to expungeStaleEntry</span></span><br><span class="line">            <span class="comment">// to remove or rehash all of the other entries in run.</span></span><br><span class="line">            <span class="keyword">if</span> (k == key) &#123;</span><br><span class="line">                e.value = value;</span><br><span class="line"></span><br><span class="line">                tab[i] = tab[staleSlot];</span><br><span class="line">                tab[staleSlot] = e;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Start expunge at preceding stale entry if it exists</span></span><br><span class="line">                <span class="keyword">if</span> (slotToExpunge == staleSlot)</span><br><span class="line">                    slotToExpunge = i;</span><br><span class="line">                cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If we didn&#x27;t find stale entry on backward scan, the</span></span><br><span class="line">            <span class="comment">// first stale entry seen while scanning for key is the</span></span><br><span class="line">            <span class="comment">// first still present in the run.</span></span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span> &amp;&amp; slotToExpunge == staleSlot)</span><br><span class="line">                slotToExpunge = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If key not found, put new entry in stale slot</span></span><br><span class="line">        tab[staleSlot].value = <span class="literal">null</span>;</span><br><span class="line">        tab[staleSlot] = <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If there are any other stale entries in run, expunge them</span></span><br><span class="line">        <span class="keyword">if</span> (slotToExpunge != staleSlot)</span><br><span class="line">            cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">expungeStaleEntry</span><span class="params">(<span class="type">int</span> staleSlot)</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// expunge entry at staleSlot</span></span><br><span class="line">        tab[staleSlot].value = <span class="literal">null</span>;</span><br><span class="line">        tab[staleSlot] = <span class="literal">null</span>;</span><br><span class="line">        size--;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Rehash until we encounter null</span></span><br><span class="line">        Entry e;</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line">        <span class="keyword">for</span> (i = nextIndex(staleSlot, len);</span><br><span class="line">             (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">             i = nextIndex(i, len)) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">            <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">                e.value = <span class="literal">null</span>;</span><br><span class="line">                tab[i] = <span class="literal">null</span>;</span><br><span class="line">                size--;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> k.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (h != i) &#123;</span><br><span class="line">                    tab[i] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// Unlike Knuth 6.4 Algorithm R, we must scan until</span></span><br><span class="line">                    <span class="comment">// null because multiple entries could have been stale.</span></span><br><span class="line">                    <span class="keyword">while</span> (tab[h] != <span class="literal">null</span>)</span><br><span class="line">                        h = nextIndex(h, len);</span><br><span class="line">                    tab[h] = e;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">cleanSomeSlots</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">removed</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            i = nextIndex(i, len);</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == <span class="literal">null</span>) &#123;</span><br><span class="line">                n = len;</span><br><span class="line">                removed = <span class="literal">true</span>;</span><br><span class="line">                i = expungeStaleEntry(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">while</span> ( (n &gt;&gt;&gt;= <span class="number">1</span>) != <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> removed;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">rehash</span><span class="params">()</span> &#123;</span><br><span class="line">        expungeStaleEntries();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Use lower threshold for doubling to avoid hysteresis</span></span><br><span class="line">        <span class="keyword">if</span> (size &gt;= threshold - threshold / <span class="number">4</span>)</span><br><span class="line">            resize();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Double the capacity of the table.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">resize</span><span class="params">()</span> &#123;</span><br><span class="line">        Entry[] oldTab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">oldLen</span> <span class="operator">=</span> oldTab.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">newLen</span> <span class="operator">=</span> oldLen * <span class="number">2</span>;</span><br><span class="line">        Entry[] newTab = <span class="keyword">new</span> <span class="title class_">Entry</span>[newLen];</span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; oldLen; ++j) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> oldTab[j];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">                ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">                <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">                    e.value = <span class="literal">null</span>; <span class="comment">// Help the GC</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> k.threadLocalHashCode &amp; (newLen - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">while</span> (newTab[h] != <span class="literal">null</span>)</span><br><span class="line">                        h = nextIndex(h, newLen);</span><br><span class="line">                    newTab[h] = e;</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        setThreshold(newLen);</span><br><span class="line">        size = count;</span><br><span class="line">        table = newTab;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Expunge all stale entries in the table.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">expungeStaleEntries</span><span class="params">()</span> &#123;</span><br><span class="line">        Entry[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[j];</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == <span class="literal">null</span>)</span><br><span class="line">                expungeStaleEntry(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过分析内部静态类 <code>ThreadLocalMap</code>, 可以知道其内部维护了一个 <code>Entry</code> 类型的数组，数组的标号就是通过以下代码得到的：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"><span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<p>其中 tab 就是 <code>ThreadLocalMap</code> 内部维护的数组， key为 <code>ThreadLocal</code> 的实例。</p>
-<p><code>Entry</code> 类继承了 <code>WeakReference</code> 类，这导致 <code>Entry</code> 类持有的 <code>ThreadLocal</code> 实例是一个弱引用， 垃圾回收的时候，这里的引用不能阻止 <code>ThreadLocal</code> 实例被回收。 一旦 key 被回收后，这个 Entry 实例就再也不能被找到， value 就永远的留在了 Entry 的实例中。 这将有内存泄漏的风险。<br>所以在使用 <code>ThreadLocal</code> 的时候， 如果 ThreadLocal 的实例不用了，需要 调用 remove() 把数据清除掉， 防止内存泄漏。</p>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>既然 <code>ThreadLocal</code> 实际是操作的 <code>Thread threadLocals</code> 变量， 为什么不使用 public 修饰变量， 而用 default 修饰变量呢？<br><code>public</code> 修饰变量， 则可以 随意的设置 key；而 <code>default</code> 修饰变量, 只能同一包的类访问这个变量。<br>这就和 <code>TreadLocal</code> 绑定在一起了， key 值只能采用 <code>ThreadLocal threadLocalHashCode</code>。</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>ThreadLocal</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>ThreadLocal</tag>
-        <tag>Source</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>发布 npm 包</title>
     <url>/blog/2023/08/07/npm/publish/</url>
     <content><![CDATA[<p>平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。<br>为什么不发布到 <a href="https://docs.npmjs.com/">npm</a> 仓库呢？<br>发布到仓库后，我们在其他项目中使用时只需要使用 <code>npm i xxx</code> 命令安装就可以了。  </p>
@@ -1246,6 +1219,66 @@ Renderer <|-- SVG</pre>
       <tags>
         <tag>npm</tag>
         <tag>publish</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Radix Sort</title>
+    <url>/blog/2023/08/01/sort/base-sort/</url>
+    <content><![CDATA[<p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。</p>
+<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：</p>
+<blockquote>
+<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
+</blockquote>
+<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个较稳定并且高效的算法，非常适合对元素位数相近的数组排序。</p>
+<span id="more"></span>
+
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据最大数位数 k 的影响，如最大数位数为 10，则 k 为 10。<br>其时间复杂度公式为 <code>O(n * k)</code>。</p>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的传递，一步步进行推导，来确定数据最终的顺序性。</p>
+<ol>
+<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
+<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
+<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: TODO</span></span><br><span class="line"><span class="comment"> * @Author: zb</span></span><br><span class="line"><span class="comment"> * @Date: 2023-08-01 21:17:58</span></span><br><span class="line"><span class="comment"> * @LastEditors: zb</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2023-08-07 01:38:43</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> baseSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数组</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">baseSort</span>(data, i);</span><br><span class="line">  mapData.<span class="title function_">clear</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Algorithm</category>
+        <category>Sort</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
+        <tag>Sort</tag>
+        <tag>Radix Sort</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 Wireshark 中查看捕获的 https 数据</title>
+    <url>/blog/2024/01/14/wireshark/https/</url>
+    <content><![CDATA[<p>使用 Fiddler 抓包，https 协议的数据通常是可以查看明文的。而在 Wireshark 中抓到的 https 数据，如果不配置密钥，默认是无法查看明文的。究其原因， 这 2 个软件抓包的实现原理是不同的。  </p>
+<span id="more"></span>
+
+<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向<br>服务器索要数字证书，自己存下来。  </p>
+<p>一方面浏览器拿到 Fillder 发送的数字证书后，会用数字证书的公钥加密自己的密钥发给 Fiddler, 这样 Fiddler 就可以用自己的私钥解密客户端发来的密钥，有了密钥就可以解密后续客户端发来的数据。 </p>
+<p>另一方面 Fiddler 拿到服务器的数字证书后，会用数字证书的公钥加密自己的密钥发给服务器，后续服务器发送的数据就会使用此密钥进行加密，这样 Fiddler 收到服务器发来的数据就可以使用自身的密钥进行解密了。</p>
+<p>而 Wireshark 是对网卡进行监听，记录网卡发送的数据， 在端到端的发送中并不能做什么手脚，所以无法直接进行解密。<br>而是需要拿到客户端的密钥，并在 Wireshark 中配置，才可以解密。<br>以下以 Chrome 客户端为例，分几个步骤，介绍怎么配置解密。  </p>
+<h2 id="设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能"><a href="#设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能" class="headerlink" title="设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能"></a>设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能</h2><ol>
+<li>打开 cmd, 执行 <code>setx SSLKEYLOGFILE  [filename]</code>;</li>
+<li>打开 cmd, 执行 <code>&quot;[chrome-execute-path]&quot; --ssl-key-log-file=[filename]</code>;</li>
+</ol>
+<p>[chrome-execute-path] 为 chrome 执行文件路径，[filename] 为密钥文件全路径。</p>
+<h2 id="设置-Wireshark"><a href="#设置-Wireshark" class="headerlink" title="设置 Wireshark"></a>设置 Wireshark</h2><p>首先通过 <code>编辑 -&gt; 首选项 -&gt; Protocols -&gt; TLS</code> 路径找到配置面板, 如(图一)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/wirshark.png" alt="(图一)"></p>
+<p>把标记区域的文件路径改为密钥文件的路径。</p>
+<h2 id="查看效果"><a href="#查看效果" class="headerlink" title="查看效果"></a>查看效果</h2><p>经过以上配置，https 的数据包就被解密了，如(图二)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/packet.png" alt="(图二)"></p>
+<p>这里展示了 <a href="https://www.baidu.com/">https://www.baidu.com</a> 的响应报文数据。<br>响应体的数据乱码，是因为数据进行了 gzip 压缩，只需复制一下原始数据，在进行 gzip 的解压就可以展示出正常的数据了。</p>
+]]></content>
+      <categories>
+        <category>Wireshark</category>
+        <category>HTTPS</category>
+      </categories>
+      <tags>
+        <tag>Wireshark</tag>
+        <tag>HTTPS</tag>
+        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
