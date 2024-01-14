@@ -896,36 +896,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在 Wireshark 中查看捕获的 https 数据</title>
-    <url>/blog/2024/01/14/wireshark/https/</url>
-    <content><![CDATA[<p>使用 Fiddler 抓包，https 协议的数据通常是可以查看明文的。而在 Wireshark 中抓到的 https 数据，如果不配置密钥，默认是无法查看明文的。究其原因， 这 2 个软件抓包的实现原理是不同的。  </p>
-<span id="more"></span>
-
-<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向服务器索要数字证书，自己存下来。  </p>
-<p>一方面浏览器拿到 Fillder 发送的数字证书后，会用数字证书的公钥加密自己的密钥发给 Fiddler, 这样 Fiddler 就可以用自己的私钥解密客户端发来的密钥，有了密钥就可以解密后续客户端发来的数据。 </p>
-<p>另一方面 Fiddler 拿到服务器的数字证书后，会用数字证书的公钥加密自己的密钥发给服务器，后续服务器发送的数据就会使用此密钥进行加密，这样 Fiddler 收到服务器发来的数据就可以使用自身的密钥进行解密了。</p>
-<p>而 Wireshark 是对网卡进行监听，记录网卡发送的数据， 在端到端的发送中并不能做什么手脚，所以无法直接进行解密。<br>而是需要拿到客户端的密钥，并在 Wireshark 中配置，才可以解密。<br>以下以 Chrome 客户端为例，分几个步骤，介绍怎么配置解密。  </p>
-<h2 id="设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能"><a href="#设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能" class="headerlink" title="设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能"></a>设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能</h2><ol>
-<li>打开 cmd, 执行 <code>setx SSLKEYLOGFILE  [filename]</code>;</li>
-<li>打开 cmd, 执行 <code>&quot;[chrome-execute-path]&quot; --ssl-key-log-file=[filename]</code>;</li>
-</ol>
-<p>[chrome-execute-path] 为 chrome 执行文件路径，[filename] 为密钥文件全路径。</p>
-<h2 id="设置-Wireshark"><a href="#设置-Wireshark" class="headerlink" title="设置 Wireshark"></a>设置 Wireshark</h2><p>首先通过 <code>编辑 -&gt; 首选项 -&gt; Protocols -&gt; TLS</code> 路径找到配置面板, 如(图一)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/wirshark.png" alt="(图一)"></p>
-<p>把标记区域的文件路径改为密钥文件的路径。</p>
-<h2 id="查看效果"><a href="#查看效果" class="headerlink" title="查看效果"></a>查看效果</h2><p>经过以上配置，https 的数据包就被解密了，如(图二)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/packet.png" alt="(图二)"></p>
-<p>这里展示了 <a href="https://www.baidu.com/">https://www.baidu.com</a> 的响应报文数据。<br>响应体的数据乱码，是因为数据进行了 gzip 压缩，只需复制一下原始数据，在进行 gzip 的解压就可以展示出正常的数据了。</p>
-]]></content>
-      <categories>
-        <category>Wireshark</category>
-        <category>HTTPS</category>
-      </categories>
-      <tags>
-        <tag>Wireshark</tag>
-        <tag>HTTPS</tag>
-        <tag>Chrome</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Leaflet.js Guide</title>
     <url>/blog/2023/08/07/map/leaflet/</url>
     <content><![CDATA[<p><a href="https://leafletjs.com/index.html">leaflet.js</a> 是用于创建地图的开源 JavaScript 库。<br>官方描述：</p>
@@ -1279,6 +1249,36 @@ Renderer <|-- SVG</pre>
         <tag>Map</tag>
         <tag>Leatlet</tag>
         <tag>Javascript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 Wireshark 中查看捕获的 https 数据</title>
+    <url>/blog/2024/01/14/wireshark/https/</url>
+    <content><![CDATA[<p>使用 Fiddler 抓包，https 协议的数据通常是可以查看明文的。而在 Wireshark 中抓到的 https 数据，如果不配置密钥，默认是无法查看明文的。究其原因， 这 2 个软件抓包的实现原理是不同的。  </p>
+<span id="more"></span>
+
+<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向服务器索要数字证书，自己存下来。  </p>
+<p>一方面浏览器拿到 Fillder 发送的数字证书后，会用数字证书的公钥加密自己的密钥发给 Fiddler, 这样 Fiddler 就可以用自己的私钥解密客户端发来的密钥，有了密钥就可以解密后续客户端发来的数据。 </p>
+<p>另一方面 Fiddler 拿到服务器的数字证书后，会用数字证书的公钥加密自己的密钥发给服务器，后续服务器发送的数据就会使用此密钥进行加密，这样 Fiddler 收到服务器发来的数据就可以使用自身的密钥进行解密了。</p>
+<p>而 Wireshark 是对网卡进行监听，记录网卡发送的数据， 在端到端的发送中并不能做什么手脚，所以无法直接进行解密。<br>而是需要拿到客户端的密钥，并在 Wireshark 中配置，才可以解密。<br>以下以 Chrome 客户端为例，分几个步骤，介绍怎么配置解密。  </p>
+<h2 id="设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能"><a href="#设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能" class="headerlink" title="设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能"></a>设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能</h2><ol>
+<li>打开 cmd, 执行 <code>setx SSLKEYLOGFILE  [filename]</code>;</li>
+<li>打开 cmd, 执行 <code>&quot;[chrome-execute-path]&quot; --ssl-key-log-file=[filename]</code>;</li>
+</ol>
+<p>[chrome-execute-path] 为 chrome 执行文件路径，[filename] 为密钥文件全路径。</p>
+<h2 id="设置-Wireshark"><a href="#设置-Wireshark" class="headerlink" title="设置 Wireshark"></a>设置 Wireshark</h2><p>首先通过 <code>编辑 -&gt; 首选项 -&gt; Protocols -&gt; TLS</code> 路径找到配置面板, 如(图一)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/wirshark.png" alt="(图一)"></p>
+<p>把标记区域的文件路径改为密钥文件的路径。</p>
+<h2 id="查看效果"><a href="#查看效果" class="headerlink" title="查看效果"></a>查看效果</h2><p>经过以上配置，https 的数据包就被解密了，如(图二)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/packet.png" alt="(图二)"></p>
+<p>这里展示了 <a href="https://www.baidu.com/">https://www.baidu.com</a> 的响应报文数据。<br>响应体的数据乱码，是因为数据进行了 gzip 压缩，只需复制一下原始数据，在进行 gzip 的解压就可以展示出正常的数据了。</p>
+]]></content>
+      <categories>
+        <category>Wireshark</category>
+        <category>HTTPS</category>
+      </categories>
+      <tags>
+        <tag>Wireshark</tag>
+        <tag>HTTPS</tag>
+        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
