@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://jinzhang-96.github.io/blog/2024/01/14/wireshark/https/wirshark.png">
 <meta property="og:image" content="https://jinzhang-96.github.io/blog/2024/01/14/wireshark/https/packet.png">
 <meta property="article:published_time" content="2024-01-14T09:04:57.007Z">
-<meta property="article:modified_time" content="2024-01-14T15:14:04.573Z">
+<meta property="article:modified_time" content="2024-01-14T15:16:56.959Z">
 <meta property="article:author" content="Bay">
 <meta property="article:tag" content="Wireshark">
 <meta property="article:tag" content="HTTPS">
@@ -221,7 +221,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-01-14 17:04:57 / 修改时间：23:14:04" itemprop="dateCreated datePublished" datetime="2024-01-14T17:04:57+08:00">2024-01-14</time>
+      <time title="创建时间：2024-01-14 17:04:57 / 修改时间：23:16:56" itemprop="dateCreated datePublished" datetime="2024-01-14T17:04:57+08:00">2024-01-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -271,7 +271,7 @@
     <div class="post-body" itemprop="articleBody"><p>使用 Fiddler 抓包，https 协议的数据通常是可以查看明文的。而在 Wireshark 中抓到的 https 数据，如果不配置密钥，默认是无法查看明文的。究其原因， 这 2 个软件抓包的实现原理是不同的。  </p>
 <span id="more"></span>
 
-<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向<br>服务器索要数字证书，自己存下来。  </p>
+<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向服务器索要数字证书，自己存下来。  </p>
 <p>一方面浏览器拿到 Fillder 发送的数字证书后，会用数字证书的公钥加密自己的密钥发给 Fiddler, 这样 Fiddler 就可以用自己的私钥解密客户端发来的密钥，有了密钥就可以解密后续客户端发来的数据。 </p>
 <p>另一方面 Fiddler 拿到服务器的数字证书后，会用数字证书的公钥加密自己的密钥发给服务器，后续服务器发送的数据就会使用此密钥进行加密，这样 Fiddler 收到服务器发来的数据就可以使用自身的密钥进行解密了。</p>
 <p>而 Wireshark 是对网卡进行监听，记录网卡发送的数据， 在端到端的发送中并不能做什么手脚，所以无法直接进行解密。<br>而是需要拿到客户端的密钥，并在 Wireshark 中配置，才可以解密。<br>以下以 Chrome 客户端为例，分几个步骤，介绍怎么配置解密。  </p>

@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Doc List</title>
+    <url>/blog/2023/11/21/doc-list/</url>
+    <content><![CDATA[<p>记录一些常用的 API 文档  </p>
+<span id="more"></span>
+
+<ol>
+<li><p><a href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
+</li>
+<li><p><a href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
+</li>
+<li><p><a href="https://zhonghui.chat/">ChatGPT</a></p>
+</li>
+<li><p><a href="https://leafletjs.com/index.html">leafletjs</a></p>
+</li>
+<li><p><a href="https://geekdaxue.co/read/leaflet-cn/v1.9.3-doc">leafletjs 中文</a></p>
+</li>
+<li><p><a href="https://datatracker.ietf.org/doc/html/rfc7946#autoid-1">GeoJSON</a></p>
+</li>
+<li><p><a href="https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">OAuth2</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Help</category>
+      </categories>
+      <tags>
+        <tag>Doc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo Guide</title>
     <url>/blog/2023/07/23/hexo-guide/</url>
     <content><![CDATA[<p><a href="https://hexo.io/">Hexo</a> 是一个快速搭建博客网站的框架。<br>以下是官网的描述：</p>
@@ -568,36 +598,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Doc List</title>
-    <url>/blog/2023/11/21/doc-list/</url>
-    <content><![CDATA[<p>记录一些常用的 API 文档  </p>
-<span id="more"></span>
-
-<ol>
-<li><p><a href="https://yeasy.gitbook.io/docker_practice/">Docker 中文</a></p>
-</li>
-<li><p><a href="https://hexo.io/zh-cn/docs/">Hexo</a></p>
-</li>
-<li><p><a href="https://zhonghui.chat/">ChatGPT</a></p>
-</li>
-<li><p><a href="https://leafletjs.com/index.html">leafletjs</a></p>
-</li>
-<li><p><a href="https://geekdaxue.co/read/leaflet-cn/v1.9.3-doc">leafletjs 中文</a></p>
-</li>
-<li><p><a href="https://datatracker.ietf.org/doc/html/rfc7946#autoid-1">GeoJSON</a></p>
-</li>
-<li><p><a href="https://www.ruanyifeng.com/blog/2019/04/oauth-grant-types.html">OAuth2</a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Help</category>
-      </categories>
-      <tags>
-        <tag>Doc</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OAuth 2 使用方式</title>
     <url>/blog/2023/11/21/oauth2/</url>
     <content><![CDATA[<p>OAuth 2 具有 认证（Authentication）和授权（Authorization）的功能</p>
@@ -618,6 +618,25 @@
       </categories>
       <tags>
         <tag>OAuth</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Cloud Alibaba deploy for Docker</title>
+    <url>/blog/2024/01/03/centos/docker-cloud/</url>
+    <content><![CDATA[<p>在 Docker 中部署 Spring Cloud Alibaba 插件中遇到的几个问题， 在此记录一下。</p>
+<span id="more"></span>
+
+<h2 id="Nacos-容器启动成功，应用连接不到"><a href="#Nacos-容器启动成功，应用连接不到" class="headerlink" title="Nacos 容器启动成功，应用连接不到"></a>Nacos 容器启动成功，应用连接不到</h2><p>  如果 Nacos 容器已经启动成功，管理页面也能访问，但是 Spring Cloud 项目却连接不上 Nacos。<br>  请确认 Nacos 容器是否开放 9848 端口，因为应用和 Nacos 通信的端口是 9848, 而不是管理页面的 8848。</p>
+<h2 id="Nacos-服务列表中的服务-IP-为-容器内部-IP，-导致应用不能通信"><a href="#Nacos-服务列表中的服务-IP-为-容器内部-IP，-导致应用不能通信" class="headerlink" title="Nacos 服务列表中的服务 IP 为 容器内部 IP， 导致应用不能通信"></a>Nacos 服务列表中的服务 IP 为 容器内部 IP， 导致应用不能通信</h2><p>  请配置 <code>docker-compose.yml</code> 文件，添加正确的 IP。<br>  如下指定 Seata 的 IP：<br>    <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line">  <span class="attr">environment:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">SEATA_IP=192.168.128.3</span></span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>CentOS</category>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Docker</tag>
+        <tag>Nacos</tag>
       </tags>
   </entry>
   <entry>
@@ -737,25 +756,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Spring Cloud Alibaba deploy for Docker</title>
-    <url>/blog/2024/01/03/centos/docker-cloud/</url>
-    <content><![CDATA[<p>在 Docker 中部署 Spring Cloud Alibaba 插件中遇到的几个问题， 在此记录一下。</p>
-<span id="more"></span>
-
-<h2 id="Nacos-容器启动成功，应用连接不到"><a href="#Nacos-容器启动成功，应用连接不到" class="headerlink" title="Nacos 容器启动成功，应用连接不到"></a>Nacos 容器启动成功，应用连接不到</h2><p>  如果 Nacos 容器已经启动成功，管理页面也能访问，但是 Spring Cloud 项目却连接不上 Nacos。<br>  请确认 Nacos 容器是否开放 9848 端口，因为应用和 Nacos 通信的端口是 9848, 而不是管理页面的 8848。</p>
-<h2 id="Nacos-服务列表中的服务-IP-为-容器内部-IP，-导致应用不能通信"><a href="#Nacos-服务列表中的服务-IP-为-容器内部-IP，-导致应用不能通信" class="headerlink" title="Nacos 服务列表中的服务 IP 为 容器内部 IP， 导致应用不能通信"></a>Nacos 服务列表中的服务 IP 为 容器内部 IP， 导致应用不能通信</h2><p>  请配置 <code>docker-compose.yml</code> 文件，添加正确的 IP。<br>  如下指定 Seata 的 IP：<br>    <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line">  <span class="attr">environment:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">SEATA_IP=192.168.128.3</span></span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>CentOS</category>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Docker</tag>
-        <tag>Nacos</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Axure 8 密钥</title>
     <url>/blog/2023/11/21/keypair/axure-8/</url>
     <content><![CDATA[<p>Axure 8 的密钥</p>
@@ -830,6 +830,99 @@
       </categories>
       <tags>
         <tag>keypair</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>发布 npm 包</title>
+    <url>/blog/2023/08/07/npm/publish/</url>
+    <content><![CDATA[<p>平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。<br>为什么不发布到 <a href="https://docs.npmjs.com/">npm</a> 仓库呢？<br>发布到仓库后，我们在其他项目中使用时只需要使用 <code>npm i xxx</code> 命令安装就可以了。  </p>
+<p>发布一个包通常包含以下几步操作，没有任何难度：  </p>
+<span id="more"></span>
+
+<h2 id="注册-npm-账号"><a href="#注册-npm-账号" class="headerlink" title="注册 npm 账号"></a>注册 npm 账号</h2><p>要往 npm 发布包，首先要有一个 npm 账号，可以在 <code>https://www.npmjs.com/signup</code> 进行注册。</p>
+<h2 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h2><p>在项目中使用 <code>npm login</code> 命令登录注册的账号。<br>登录完成后，使用 <code>npm whoami</code> 命令查看当前登录的账号，确认是否登录成功。</p>
+<h2 id="配置项目"><a href="#配置项目" class="headerlink" title="配置项目"></a>配置项目</h2><p>发布包之前，请确保项目已经符合发布的标准，别人安装后能正常使用。  </p>
+<p>一般需要正确配置以下：  </p>
+<ol>
+<li><p><code>package.json</code> 文件中 <code>dependencies</code> 配置正确的依赖。  </p>
+</li>
+<li><p><code>package.json</code> 文件中 <code>main</code> 配置正确的入口文件，这样在项目中才能正确导入模块。</p>
+</li>
+<li><p>构建项目</p>
+</li>
+<li><p>npm 的 registry 必须是 <code>https://registry.npmjs.org/</code>，如果配置了代理镜像，请改过来。</p>
+</li>
+<li><p>确保包名唯一。包名就是  <code>package.json</code> 文件中 <code>name</code> 的值，可使用 <code> npm view &lt;name&gt;</code> 命令查看此包名是否存在。</p>
+</li>
+</ol>
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><p>使用 <code>npm publish</code> 发布本地包到 npm registry，发布成功后。可以在 <code>https://www.npmjs.com/</code> 网站登录自己的账号，进入 packages 页面查看是否发布成功，如（图一）所示:<br><img data-src="/blog/2023/08/07/npm/publish/package.jpg" alt="(图一)"></p>
+]]></content>
+      <categories>
+        <category>npm</category>
+      </categories>
+      <tags>
+        <tag>npm</tag>
+        <tag>publish</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Radix Sort</title>
+    <url>/blog/2023/08/01/sort/base-sort/</url>
+    <content><![CDATA[<p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。</p>
+<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：</p>
+<blockquote>
+<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
+</blockquote>
+<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个较稳定并且高效的算法，非常适合对元素位数相近的数组排序。</p>
+<span id="more"></span>
+
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据最大数位数 k 的影响，如最大数位数为 10，则 k 为 10。<br>其时间复杂度公式为 <code>O(n * k)</code>。</p>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的传递，一步步进行推导，来确定数据最终的顺序性。</p>
+<ol>
+<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
+<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
+<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: TODO</span></span><br><span class="line"><span class="comment"> * @Author: zb</span></span><br><span class="line"><span class="comment"> * @Date: 2023-08-01 21:17:58</span></span><br><span class="line"><span class="comment"> * @LastEditors: zb</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2023-08-07 01:38:43</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> baseSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数组</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">baseSort</span>(data, i);</span><br><span class="line">  mapData.<span class="title function_">clear</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Algorithm</category>
+        <category>Sort</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
+        <tag>Sort</tag>
+        <tag>Radix Sort</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 Wireshark 中查看捕获的 https 数据</title>
+    <url>/blog/2024/01/14/wireshark/https/</url>
+    <content><![CDATA[<p>使用 Fiddler 抓包，https 协议的数据通常是可以查看明文的。而在 Wireshark 中抓到的 https 数据，如果不配置密钥，默认是无法查看明文的。究其原因， 这 2 个软件抓包的实现原理是不同的。  </p>
+<span id="more"></span>
+
+<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向服务器索要数字证书，自己存下来。  </p>
+<p>一方面浏览器拿到 Fillder 发送的数字证书后，会用数字证书的公钥加密自己的密钥发给 Fiddler, 这样 Fiddler 就可以用自己的私钥解密客户端发来的密钥，有了密钥就可以解密后续客户端发来的数据。 </p>
+<p>另一方面 Fiddler 拿到服务器的数字证书后，会用数字证书的公钥加密自己的密钥发给服务器，后续服务器发送的数据就会使用此密钥进行加密，这样 Fiddler 收到服务器发来的数据就可以使用自身的密钥进行解密了。</p>
+<p>而 Wireshark 是对网卡进行监听，记录网卡发送的数据， 在端到端的发送中并不能做什么手脚，所以无法直接进行解密。<br>而是需要拿到客户端的密钥，并在 Wireshark 中配置，才可以解密。<br>以下以 Chrome 客户端为例，分几个步骤，介绍怎么配置解密。  </p>
+<h2 id="设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能"><a href="#设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能" class="headerlink" title="设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能"></a>设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能</h2><ol>
+<li>打开 cmd, 执行 <code>setx SSLKEYLOGFILE  [filename]</code>;</li>
+<li>打开 cmd, 执行 <code>&quot;[chrome-execute-path]&quot; --ssl-key-log-file=[filename]</code>;</li>
+</ol>
+<p>[chrome-execute-path] 为 chrome 执行文件路径，[filename] 为密钥文件全路径。</p>
+<h2 id="设置-Wireshark"><a href="#设置-Wireshark" class="headerlink" title="设置 Wireshark"></a>设置 Wireshark</h2><p>首先通过 <code>编辑 -&gt; 首选项 -&gt; Protocols -&gt; TLS</code> 路径找到配置面板, 如(图一)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/wirshark.png" alt="(图一)"></p>
+<p>把标记区域的文件路径改为密钥文件的路径。</p>
+<h2 id="查看效果"><a href="#查看效果" class="headerlink" title="查看效果"></a>查看效果</h2><p>经过以上配置，https 的数据包就被解密了，如(图二)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/packet.png" alt="(图二)"></p>
+<p>这里展示了 <a href="https://www.baidu.com/">https://www.baidu.com</a> 的响应报文数据。<br>响应体的数据乱码，是因为数据进行了 gzip 压缩，只需复制一下原始数据，在进行 gzip 的解压就可以展示出正常的数据了。</p>
+]]></content>
+      <categories>
+        <category>Wireshark</category>
+        <category>HTTPS</category>
+      </categories>
+      <tags>
+        <tag>Wireshark</tag>
+        <tag>HTTPS</tag>
+        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
@@ -1186,99 +1279,6 @@ Renderer <|-- SVG</pre>
         <tag>Map</tag>
         <tag>Leatlet</tag>
         <tag>Javascript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>发布 npm 包</title>
-    <url>/blog/2023/08/07/npm/publish/</url>
-    <content><![CDATA[<p>平时我们写的一些前端公共工具或者库，在复用时如果还手动复制，效率不仅比较低并且不够优雅。<br>为什么不发布到 <a href="https://docs.npmjs.com/">npm</a> 仓库呢？<br>发布到仓库后，我们在其他项目中使用时只需要使用 <code>npm i xxx</code> 命令安装就可以了。  </p>
-<p>发布一个包通常包含以下几步操作，没有任何难度：  </p>
-<span id="more"></span>
-
-<h2 id="注册-npm-账号"><a href="#注册-npm-账号" class="headerlink" title="注册 npm 账号"></a>注册 npm 账号</h2><p>要往 npm 发布包，首先要有一个 npm 账号，可以在 <code>https://www.npmjs.com/signup</code> 进行注册。</p>
-<h2 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h2><p>在项目中使用 <code>npm login</code> 命令登录注册的账号。<br>登录完成后，使用 <code>npm whoami</code> 命令查看当前登录的账号，确认是否登录成功。</p>
-<h2 id="配置项目"><a href="#配置项目" class="headerlink" title="配置项目"></a>配置项目</h2><p>发布包之前，请确保项目已经符合发布的标准，别人安装后能正常使用。  </p>
-<p>一般需要正确配置以下：  </p>
-<ol>
-<li><p><code>package.json</code> 文件中 <code>dependencies</code> 配置正确的依赖。  </p>
-</li>
-<li><p><code>package.json</code> 文件中 <code>main</code> 配置正确的入口文件，这样在项目中才能正确导入模块。</p>
-</li>
-<li><p>构建项目</p>
-</li>
-<li><p>npm 的 registry 必须是 <code>https://registry.npmjs.org/</code>，如果配置了代理镜像，请改过来。</p>
-</li>
-<li><p>确保包名唯一。包名就是  <code>package.json</code> 文件中 <code>name</code> 的值，可使用 <code> npm view &lt;name&gt;</code> 命令查看此包名是否存在。</p>
-</li>
-</ol>
-<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><p>使用 <code>npm publish</code> 发布本地包到 npm registry，发布成功后。可以在 <code>https://www.npmjs.com/</code> 网站登录自己的账号，进入 packages 页面查看是否发布成功，如（图一）所示:<br><img data-src="/blog/2023/08/07/npm/publish/package.jpg" alt="(图一)"></p>
-]]></content>
-      <categories>
-        <category>npm</category>
-      </categories>
-      <tags>
-        <tag>npm</tag>
-        <tag>publish</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Radix Sort</title>
-    <url>/blog/2023/08/01/sort/base-sort/</url>
-    <content><![CDATA[<p>排序和查找是常见的编程基本算法，刚毕业时还曾花时间<a href="https://github.com/JinZhang-96/algorithm/tree/master/algorithm/src/com/zb/arraySort">学习</a>，由于平时不怎么使用，所以现在对每种排序算法的计算过程已经渐渐淡忘。。。</p>
-<p>今天回忆了一下基数排序的算法的思路，动手敲了一遍代码，算是熟练了一些，有些心得：</p>
-<blockquote>
-<p>学习算法不能仅仅参照一个例题或者一段实现代码，死记硬背的学习，而是需要理解其算法思想，融会贯通，这样才能举一反三，精益求精。就像学习数学一样，如果不理解其公式，就很难做到灵活使用，在题目中提炼数学抽象模型，套用数学公式解决问题。</p>
-</blockquote>
-<p>排序算法有很多，如：冒泡排序、选择排序、插入排序、快速排序、堆排序、归并排序、基数排序，其中基数排序是一个较稳定并且高效的算法，非常适合对元素位数相近的数组排序。</p>
-<span id="more"></span>
-
-<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>基数排序的时间复杂度受待排数据最大数位数 k 的影响，如最大数位数为 10，则 k 为 10。<br>其时间复杂度公式为 <code>O(n * k)</code>。</p>
-<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>基数排序的核心思想是利用数据局部顺序性的传递，一步步进行推导，来确定数据最终的顺序性。</p>
-<ol>
-<li>从数据的第一位开始比较， 把数字相同的归类到一起。</li>
-<li>归类完成后，再把归类的数据从小到大聚集到一起。</li>
-<li>循环 第 1 和第 2 步，直到所有的位数都比较一遍。</li>
-</ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: TODO</span></span><br><span class="line"><span class="comment"> * @Author: zb</span></span><br><span class="line"><span class="comment"> * @Date: 2023-08-01 21:17:58</span></span><br><span class="line"><span class="comment"> * @LastEditors: zb</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2023-08-07 01:38:43</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">let</span> num = <span class="number">1000</span>,</span><br><span class="line">  max = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> data = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num; i++) &#123;</span><br><span class="line">  data.<span class="title function_">push</span>(<span class="title class_">Number</span>.<span class="built_in">parseInt</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * max));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapData = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; data 待排序数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; position 第几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> baseSort = <span class="keyword">function</span> (<span class="params">data, position</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> l = data[i].<span class="title function_">toString</span>().<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 取出当前排序位数的数字， 如果没有数字，则设置为最小值0</span></span><br><span class="line">    <span class="keyword">let</span> n =</span><br><span class="line">      l - <span class="number">1</span> &lt; position</span><br><span class="line">        ? <span class="number">0</span></span><br><span class="line">        : <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(data[i].<span class="title function_">toString</span>().<span class="title function_">charAt</span>(l - <span class="number">1</span> - position));</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">if</span> (!mapData.<span class="title function_">has</span>(n)) &#123;</span><br><span class="line">      mapData.<span class="title function_">set</span>(n, []);</span><br><span class="line">    &#125;</span><br><span class="line">    mapData.<span class="title function_">get</span>(n).<span class="title function_">push</span>(data[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 合并排序完的数组</span></span><br><span class="line">  <span class="keyword">return</span> [...mapData.<span class="title function_">keys</span>()]</span><br><span class="line">    .<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> mapData.<span class="title function_">get</span>(key))</span><br><span class="line">    .<span class="title function_">reduce</span>(<span class="function">(<span class="params">arr, itemArr</span>) =&gt;</span> (arr.<span class="title function_">push</span>(...itemArr), arr), []);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到待排序数组中位数最长的数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  maxLength = <span class="title class_">Math</span>.<span class="title function_">max</span>(maxLength, data[i].<span class="title function_">toString</span>().<span class="property">length</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对待排序数组中的每一位数字进行排序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; maxLength; i++) &#123;</span><br><span class="line">  data = <span class="title function_">baseSort</span>(data, i);</span><br><span class="line">  mapData.<span class="title function_">clear</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Algorithm</category>
-        <category>Sort</category>
-      </categories>
-      <tags>
-        <tag>Algorithm</tag>
-        <tag>Sort</tag>
-        <tag>Radix Sort</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在 Wireshark 中查看捕获的 https 数据</title>
-    <url>/blog/2024/01/14/wireshark/https/</url>
-    <content><![CDATA[<p>使用 Fiddler 抓包，https 协议的数据通常是可以查看明文的。而在 Wireshark 中抓到的 https 数据，如果不配置密钥，默认是无法查看明文的。究其原因， 这 2 个软件抓包的实现原理是不同的。  </p>
-<span id="more"></span>
-
-<p>  Fiddler 在客户端和服务器中间起到一个代理者的作用， 客户端向服务器请求数字证书时， Fiddler 会把自己的数字证书给客户端， 然后 Fiddler 再向<br>服务器索要数字证书，自己存下来。  </p>
-<p>一方面浏览器拿到 Fillder 发送的数字证书后，会用数字证书的公钥加密自己的密钥发给 Fiddler, 这样 Fiddler 就可以用自己的私钥解密客户端发来的密钥，有了密钥就可以解密后续客户端发来的数据。 </p>
-<p>另一方面 Fiddler 拿到服务器的数字证书后，会用数字证书的公钥加密自己的密钥发给服务器，后续服务器发送的数据就会使用此密钥进行加密，这样 Fiddler 收到服务器发来的数据就可以使用自身的密钥进行解密了。</p>
-<p>而 Wireshark 是对网卡进行监听，记录网卡发送的数据， 在端到端的发送中并不能做什么手脚，所以无法直接进行解密。<br>而是需要拿到客户端的密钥，并在 Wireshark 中配置，才可以解密。<br>以下以 Chrome 客户端为例，分几个步骤，介绍怎么配置解密。  </p>
-<h2 id="设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能"><a href="#设置-Chrome-密钥记录的文件，并开启-Chrome-的密钥记录功能" class="headerlink" title="设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能"></a>设置 Chrome 密钥记录的文件，并开启 Chrome 的密钥记录功能</h2><ol>
-<li>打开 cmd, 执行 <code>setx SSLKEYLOGFILE  [filename]</code>;</li>
-<li>打开 cmd, 执行 <code>&quot;[chrome-execute-path]&quot; --ssl-key-log-file=[filename]</code>;</li>
-</ol>
-<p>[chrome-execute-path] 为 chrome 执行文件路径，[filename] 为密钥文件全路径。</p>
-<h2 id="设置-Wireshark"><a href="#设置-Wireshark" class="headerlink" title="设置 Wireshark"></a>设置 Wireshark</h2><p>首先通过 <code>编辑 -&gt; 首选项 -&gt; Protocols -&gt; TLS</code> 路径找到配置面板, 如(图一)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/wirshark.png" alt="(图一)"></p>
-<p>把标记区域的文件路径改为密钥文件的路径。</p>
-<h2 id="查看效果"><a href="#查看效果" class="headerlink" title="查看效果"></a>查看效果</h2><p>经过以上配置，https 的数据包就被解密了，如(图二)所示：<br><img data-src="/blog/2024/01/14/wireshark/https/packet.png" alt="(图二)"></p>
-<p>这里展示了 <a href="https://www.baidu.com/">https://www.baidu.com</a> 的响应报文数据。<br>响应体的数据乱码，是因为数据进行了 gzip 压缩，只需复制一下原始数据，在进行 gzip 的解压就可以展示出正常的数据了。</p>
-]]></content>
-      <categories>
-        <category>Wireshark</category>
-        <category>HTTPS</category>
-      </categories>
-      <tags>
-        <tag>Wireshark</tag>
-        <tag>HTTPS</tag>
-        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
