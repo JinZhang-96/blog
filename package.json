@@ -47,6 +47,6 @@
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-optipng": "^8.0.0",
     "imagemin-pngquant": "9.0.2",
-    "ow": "^0.17.0"
+    "ow": "^3.1.1"
   }
 }
